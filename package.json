@@ -1,0 +1,25 @@
+{
+  "name": "aeroaljarafefrom0",
+  "version": "1.0.0",
+  "description": "Proyecto de Gestión de Aeroaljarafe con una API REST y Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "José Espejo Roig",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
+    "jwt-simple": "^0.5.5",
+    "moment": "^2.23.0",
+    "mongoose": "^5.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

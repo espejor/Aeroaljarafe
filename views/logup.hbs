@@ -1,0 +1,38 @@
+<form id="logup" method="post" enctype="multipart/form-data" name="logup">
+    <input type="text" name="name" placeholder="Nombre" required="true" >
+    <br><br>
+    <input type="email" name="email" placeholder="Tu email" value="mi@email.com" required="true">
+    <br><br>
+    <input type="password" name="password" placeholder="Tu contraseña" required="true">
+    <br><br>
+    <input type="password" name="passwordRep" placeholder="Repite tu contraseña" required="true">
+    <br><br>
+    <input type="submit" value="Register">
+</form>
+
+<script type="text/javascript">
+    const formLog = document.querySelector('#logup')
+    //Creamos un objeto con los datos del formulario
+
+    // AL formLog le agregamos un evento 
+    formLog.addEventListener('submit',function(event){
+        event.preventDefault()
+        const data = new FormData(this)
+        var dataObj = {}
+        data.forEach(function (value, key) {
+            dataObj[key] = value;
+        });
+        fetch('/api/signup',{
+            method:'POST',
+            body: JSON.stringify( dataObj ),
+            headers: {'Content-Type':'application/json;charset=UTF-8'}
+        })
+        .then(res => 
+            res.json()
+        )
+        .then(data => 
+            console.log(data)
+            //localStorage.setItem('token', data.token)
+        )
+    })
+</script>

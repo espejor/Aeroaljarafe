@@ -1,0 +1,31 @@
+
+
+<script type="text/javascript">
+    let planeList = document.createElement('ul')
+
+    const myHeaders = new Headers({
+    'Content-Type': 'text/xml'
+})
+    
+    myHeaders.set('authorization', `Bearer ${localStorage.token}`)
+
+     x = myHeaders.get('authorization')
+
+    fetch('/api/plane', {
+        method: 'GET',
+        headers: myHeaders
+    })
+    // La promesa recibe una respuesta
+    .then(res => res.json())  // La respuesta de la promesa pasa a formato json
+    // Y recibe los datos
+    .then(data => {
+        data.planes.map(plane => {
+            let text = document.createTextNode(plane.plate)
+            let elem = document.createElement('li')
+            elem.appendChild(text)
+            planeList.appendChild(elem)
+        })
+
+        document.body.appendChild(planeList)
+    })
+</script>

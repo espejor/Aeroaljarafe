@@ -8,7 +8,8 @@ function getBrand(req,res){
         if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
         if (!brand) return res.status(404).send({message: `No se encuentra en la BD`})
 
-        res.status(200).send({brand})
+        res.locals.brand = brand
+        res.render("showBrand",res.locals.brand)
     })
 }
 
@@ -17,9 +18,8 @@ function getBrands(req,res){
         if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
         if (!brands) return res.status(404).send({message: `No se existen Marcas en la BD`})
         
-        
         res.locals.brands = brands
-        res.render("brand",res.locals.brands)
+        res.render("brands",res.locals.brands)
     })
 }
 
@@ -27,15 +27,18 @@ function saveBrand(req,res){
     console.log('POST /api/brand')
     console.log(req.body)
 
-    // Creamos un nuevo objeto Marca
-    let brand = new Brand()
-    // Y le asignamos las propiedades pasados por POST
-    brand.brand = req.body.brand
-    // Salvamos la nueva Marca en la BD
-    brand.save((err,brandStored) => {
-        if (err) res.status(500).send({message: `Error al guardar en la BD: ${err}`})
-        res.status(200).send({brand: brandStored})
-    }) 
+    if (req.body.brand){
+        // Creamos un nuevo objeto Marca
+        let brand = new Brand()
+        // Y le asignamos las propiedades pasados por POST
+        brand.brand = req.body.brand
+        // Salvamos la nueva Marca en la BD
+        brand.save((err,brandStored) => {
+            if (err) res.status(500).send({message: `Error al guardar en la BD: ${err}`})
+            res.locals.brand = brandStored
+            res.render("showBrand",res.locals.brand)
+        })  
+    }
 }
 
 function updateBrand(req,res){
@@ -57,9 +60,14 @@ function deleteBrand(req,res){
 
         brand.remove(err => {
             if (err)  return res.status(500).send({message: `Error en la petición: ${err}`})
-            res.status(200).send({message: `Elemento borrado: ${brand}`})
+            console.log(`Elemento borrado: ${brand}`)
+            res.redirect("/api/brands")
         })    
     })
+}
+
+function newBrand(req,res){
+    res.render("newBrand")
 }
 
 module.exports = {
@@ -68,5 +76,6 @@ module.exports = {
     saveBrand,
     updateBrand,
     deleteBrand,
+    newBrand
 }
 

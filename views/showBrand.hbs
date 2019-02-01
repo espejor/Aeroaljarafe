@@ -1,0 +1,30 @@
+<div class="container">
+    <ul  class="list-group">
+        <li class="list-group-item list-group-item-info">
+            <h3 class="list-group-item-header">Marca de Aeronaves</h3>
+        </li>
+        <li class="list-group-item" >
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{brand}}</h3><p><small>id: {{_id}}</small></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Imagen</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                    <form method="POST" action="brand/{{_id}}?_method=PUT" class= "link right-space">
+                        <input type= "submit" value="Editar" class= "btn btn-info">
+                    </form>
+                    <form method="POST" action="brand/{{_id}}?_method=DELETE" class= "link right-space">
+                        <input type= "submit" value="Borrar" class= "btn btn-danger">                            
+                    </form>
+                </div>
+            </div>            
+        </li>
+    </ul>
+</div>

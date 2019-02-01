@@ -14,19 +14,6 @@ function getPlane(req,res){
     })
 }
 
-// function getPlanes(req,res){
-//     Plane.find({}, (err,planes) => {
-//         if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
-//         if (!planes) return res.status(404).send({message: `No se existen aviones en la BD`})
-                
-//         Model.populate(planes,{path:"model"},(err,planes) =>{
-//             Brand.populate(planes,{path:"model.brand"},(err,planes) => {
-//                 res.locals.planes = planes
-//                 res.render("plane",res.locals.planes)                
-//             })
-//         })
-//     })
-// }
 
 function getPlanes(req,res){
     Plane.find({}).populate({path:"model",populate:{path:"brand"}}).exec((err,planes) => {
@@ -36,7 +23,7 @@ function getPlanes(req,res){
         // Model.populate(planes,{path:"model"},(err,planes) =>{
         //     Brand.populate(planes,{path:"model.brand"},(err,planes) => {
                 res.locals.planes = planes
-                res.render("plane",res.locals.planes)                
+                res.render("planes",res.locals.planes)                
         //     })
         // })
     })

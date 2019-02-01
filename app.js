@@ -4,9 +4,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const hbs = require('express-handlebars')   // Motor de plantillas Handlebars
 const app = express()
-const api = require('./routes')
+const api = require('./routes')(express)
 
-// Cargamos los middleware0
+// Cargamos los middleware
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 // Configuramos el motor de plantillas 
@@ -17,6 +17,7 @@ app.engine('.hbs',hbs({
 app.set('view engine','.hbs')
 
 app.use('/api',api)
+app.use(express.static('public'));
 
 // Renderizado de vistas
 app.get('/logup',(req,res) => {
@@ -28,5 +29,6 @@ app.get('/login',(req,res) => {
 app.get('/', (req, res) => {
     res.render('plane')
 })
+
 
 module.exports = app

@@ -10,20 +10,50 @@ SALT_WORK_FACTOR = 10,
 // these values can be whatever you want - we're defaulting to a
 // max of 5 attempts, resulting in a 2 hour lock
 MAX_LOGIN_ATTEMPTS = 5,
-LOCK_TIME = 2 * 60 * 60 * 1000;
+LOCK_TIME = 2 * 60 * 60 * 1000,
+REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+
+passwordValidation = {
+    validator: function(psw) {
+        return this.passwordConfirmation == psw
+    },
+    message: "las contraseñas no son iguales"    
+}
+
+
 
 // Creamos el Schema
 const UserSchema = new Schema({
-    mail: {type: String, unique:true, lowercase: true},
+    mail: {type: String, unique:true, lowercase: true,required: true, match:REGEX},
     displayName: String,
     avatar: String,  // URL del Avatar
-    password: {type: String, select: false,required: true},
+    password: {
+        type: String, 
+        select: false,
+        minlength: 8,
+        required: true,
+        validate: passwordValidation
+    },
     signupDate: {type: Date, default: Date.now()},
     lastLogin: Date,
     // Control de intentos repetitivos de logueado fallido
     loginAttempts: { type: Number, required: true, default: 0 },
     lockUntil: { type: Number }
 })
+
+// Atributos Virtual
+UserSchema.virtual('passwordConfirmation')
+    .get(function(){
+        return this.pswConf
+    })
+    .set(function(psw){
+        this.pswConf = psw
+    })
+
+UserSchema.virtual('isLocked').get(function() {
+    // check for a future lockUntil timestamp
+    return !!(this.lockUntil && this.lockUntil > Date.now());
+});
 
 // expose enum on the model, and provide an internal convenience reference 
 var reasons = UserSchema.statics.failedLogin = {
@@ -32,11 +62,6 @@ var reasons = UserSchema.statics.failedLogin = {
     MAX_ATTEMPTS: 2
 };
 
-
-UserSchema.virtual('isLocked').get(function() {
-    // check for a future lockUntil timestamp
-    return !!(this.lockUntil && this.lockUntil > Date.now());
-});
 
 // Funciones a ejecutar antes o despues de que el modelo se 
 // se almacene en la BD

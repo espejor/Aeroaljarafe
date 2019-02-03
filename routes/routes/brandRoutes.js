@@ -11,6 +11,7 @@ module.exports = function(api){
 //    api.get("/brand/:brandId/show", brandCtrl.getBrand)
     api.post("/brand",brandCtrl.saveBrand)
     api.put("/brand/:brandId",brandCtrl.updateBrand)
+    api.put("/brand/brand/:brandId",brandCtrl.updateBrand)
     api.delete("/brand/:brandId",brandCtrl.deleteBrand)
     // api.get("/b",auth,function(req,res){
     //     return res.status(200).send({message:'Acceso permitido'})

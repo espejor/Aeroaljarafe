@@ -21,7 +21,7 @@ function getModels(req,res){
         
         Brand.populate(models,{path:"brand"},(err,models) =>{
             res.locals.models = models
-            res.render("models",res.locals.models)
+            res.render("models/models",res.locals.models)
         })
 
     })

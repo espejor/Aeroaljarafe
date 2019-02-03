@@ -23,7 +23,7 @@ function getPlanes(req,res){
         // Model.populate(planes,{path:"model"},(err,planes) =>{
         //     Brand.populate(planes,{path:"model.brand"},(err,planes) => {
                 res.locals.planes = planes
-                res.render("planes",res.locals.planes)                
+                res.render("planes/planes",res.locals.planes)                
         //     })
         // })
     })

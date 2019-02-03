@@ -1,6 +1,8 @@
 'use strict'
 
 const Brand = require('../models/brandModel')
+const formidable = require("formidable")
+const fs = require("fs")
 
 function getBrand(req,res){
     let brandId = req.params.brandId
@@ -9,7 +11,7 @@ function getBrand(req,res){
         if (!brand) return res.status(404).send({message: `No se encuentra en la BD`})
 
         res.locals.brand = brand
-        res.render("showBrand",res.locals.brand)
+        res.render("brands/showBrand",res.locals.brand)
     })
 }
 
@@ -19,26 +21,35 @@ function getBrands(req,res){
         if (!brands) return res.status(404).send({message: `No se existen Marcas en la BD`})
         
         res.locals.brands = brands
-        res.render("brands",res.locals.brands)
+        res.render("brands/brands",res.locals.brands)
     })
 }
 
 function saveBrand(req,res){
     console.log('POST /api/brand')
-    console.log(req.body)
 
-    if (req.body.brand){
+    var form = new formidable.IncomingForm();
+    form.keepExtensions = true
+    form.parse(req, function(err, fields, files) {
+
+        let extension = files.image.name.split(".").pop()
+
         // Creamos un nuevo objeto Marca
         let brand = new Brand()
         // Y le asignamos las propiedades pasados por POST
-        brand.brand = req.body.brand
+        brand.brand = fields.brand
+        brand.extension = extension
         // Salvamos la nueva Marca en la BD
         brand.save((err,brandStored) => {
-            if (err) res.status(500).send({message: `Error al guardar en la BD: ${err}`})
+            if (err) 
+                res.status(500).send({message: `Error al guardar en la BD: ${err}`})
+            let newFile = brand._id + "." + extension
+            fs.rename(files.image.path,"public/images/" +  newFile)
+            console.log(brandStored)
             res.locals.brand = brandStored
-            res.render("showBrand",res.locals.brand)
+            res.render("brands/showBrand",res.locals.brand)
         })  
-    }
+    });
 }
 
 function updateBrand(req,res){
@@ -67,7 +78,7 @@ function deleteBrand(req,res){
 }
 
 function newBrand(req,res){
-    res.render("newBrand")
+    res.render("brands/newBrand")
 }
 
 module.exports = {

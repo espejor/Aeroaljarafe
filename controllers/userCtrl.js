@@ -36,10 +36,19 @@ function signIn(req,res){
             req.user = user
             // Devolvemos información de que se ha logeado y el token que servirá para que la aplicación de usuario
             // lo ponga en la cabecera de sus peticiones y se le garantice elacceso a las páginas que tenga autorz.
+            
             res.status(200).send({
                 message:`Te has logueado correctamente`,
                 token: service.createToken(user)
-            }) 
+            })
+            // res.locals.token = service.createToken(user)
+            // res.locals.message = `Te has logueado correctamente`
+            
+            // res.render('index',function(err, html) {
+            //     res.status = 200
+            //     res.send(html)
+            //   });
+
         }
 
         // otherwise we can determine why we failed

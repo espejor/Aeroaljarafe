@@ -1,0 +1,85 @@
+<form method="POST" action="/api/plane/{{plane._id}}?_method=PUT" class="right-space" enctype="multipart/form-data">
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-info">
+            <h3 class="list-group-item-header">Editar {{plane.plate}}</h3>
+        </li>
+        <li class="list-group-item">
+            <div class="card">
+                <div class="row h-100">
+                    <div class="col-md-12">
+                        <br>
+                    </div>
+                    <div class="row h-100">
+                        <div class="col-md-5">
+                            <div>
+                                <img src="/images/{{plane._id}}.{{plane.extension}}" alt="imagen"
+                                    class="card-img-top center" style="width:75%; ">
+                            </div>
+                            <div class="card-body">
+                                <label for="image">Cambiar Imagen</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                                <label for="plate">Matrícula</label>
+                                <input type="text" id="plate" name="plate" value='{{plane.plate}}' required="true"
+                                    class="form-control">
+                                <label for="model">Modelo</label>
+                                <select name="model" class="form-control">
+                                    {{# each models}}
+                                        <option value="{{_id}}">{{brand.brand}} {{model}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status">Estado</label>
+                            <select name="status" class="form-control" id = "status">
+                                {{# each statusOptions}}
+                                    <option {{# if this.[0] }}selected{{/if}} >{{this.[1]}}</option>
+                                {{/each}}
+                            </select>
+                            <label for="availability">Disponibilidad</label>
+                            <input type="hidden" id="availabilityHidden" name="availabilityHidden" value ='{{plane.availability}}'>
+                            <select name="availability" class="form-control" id = "availability" value='{{plane.availability}}'>
+                                {{# each availabilityOptions}}
+                                    <option {{# if this.[0] }}selected{{/if}} >{{this.[1]}}</option>
+                                {{/each}}
+                            </select>
+                            <label for="nextMaintenance">Próximo Mantenimiento</label>
+                            <input type="date" id="nextMaintenance" name="nextMaintenance"
+                                value={{plane.nextMaintenanceFormated}} required="true" class="form-control">
+                            <label for="hours">Horas</label>
+                            <input type="number" id="hours" name="hours" value='{{plane.hours}}' required="true"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer">
+                            <input type="submit" value="Guardar" class="btn btn-success btn-block btn-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</form>
+
+<script type="text/javascript">
+    const formStatus = document.querySelector('#status')
+    const formAvailability = document.querySelector('#availability')
+    const formAvailabilityHidden = document.querySelector('#availabilityHidden')
+
+    formStatus.addEventListener('change',function(event){
+        if (formStatus.value != "Operativo"){
+            formAvailability.value = "No disponible"
+            formAvailabilityHidden.value = "No disponible"
+            formAvailability.disabled = true
+        }else{
+            formAvailability.disabled = false
+            formAvailability.value = "Disponible"
+            formAvailabilityHidden.value = "Disponible"
+        }
+    })
+
+    formAvailability.addEventListener('change',function(event){
+        formAvailabilityHidden.value = formAvailability.value
+    })
+</script>

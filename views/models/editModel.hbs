@@ -1,0 +1,37 @@
+
+    <ul  class="list-group">
+        <li class="list-group-item list-group-item-info">
+            <h3 class="list-group-item-header">Editar Modelo {{model.model}}</h3>
+        </li>
+        <li class="list-group-item" >
+            <div class="row h-100">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="/images/{{model._id}}.{{model.extension}}" alt="imagen"  class="card-img-top center" style="width:50%; ">
+                        <form method="POST" action="/api/model/{{_id}}?_method=PUT" class= "link right-space" enctype="multipart/form-data" 
+                    >
+                        
+                            <div>
+                                <label for="image">Cambiar Imagen</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for = "brand">Marca</label>    
+                                <select name="brand" class="form-control">                    
+                                {{# each brands}}
+                                    <option value = "{{this.[1]._id}}" {{# if this.[0] }}selected{{/if}} >{{this.[1].value}}</option>
+                                {{/each}}
+                                </select>
+                                <label for = "model">Modelo</label>
+                                <input type="text" id = "model" name="model" value='{{model.model}}' required="true" class="form-control">
+                            </div>
+                            <div class="card-footer">
+                           
+                                <input type= "submit" value="Guardar" class= "btn btn-success btn-block btn-sm">                        
+                            </div>
+                        </form>
+                    </div> 
+                </div>
+            </div>
+        </li>
+    </ul>

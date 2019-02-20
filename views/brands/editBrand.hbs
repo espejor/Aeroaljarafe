@@ -1,29 +1,34 @@
 
     <ul  class="list-group">
         <li class="list-group-item list-group-item-info">
-            <h3 class="list-group-item-header">Marca de Aeronaves</h3>
+            <h3 class="list-group-item-header">Editar {{brand}}</h3>
         </li>
         <li class="list-group-item" >
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>{{brand}}</h3><p><small>id: {{_id}}</small></p>
+            <div class="row h-100">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="/images/{{_id}}.{{extension}}" alt="imagen"  class="card-img-top center" style="width:50%; ">
+                        <form method="POST" action="/api/brand/{{_id}}?_method=PUT" class= "link right-space" enctype="multipart/form-data" 
+                    >
+                        
+                            <div>
+                                <label for="image">Cambiar Imagen</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for = "brand">Marca</label>
+                                <input type="text" id = "brand" name="brand" value='{{brand}}' required="true" class="form-control">
+                            </div>
+                            <div class="card-footer">
+                            {{!-- <form method="POST" action="/api/brand/{{_id}}?_method=PUT" class= "link right-space">
+                                <input type= "submit" value="Editar" class= "btn btn-info">
+                            </form> --}}
+                            
+                                <input type= "submit" value="Guardar" class= "btn btn-success btn-block btn-sm">                        
+                            </div>
+                        </form>
+                    </div> 
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>Imagen</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10"></div>
-                <div class="col-md-2">
-                    <form method="POST" action="brand/{{_id}}?_method=PUT" class= "link right-space">
-                        <input type= "submit" value="Editar" class= "btn btn-info">
-                    </form>
-                    <form method="POST" action="brand/{{_id}}?_method=DELETE" class= "link right-space">
-                        <input type= "submit" value="Borrar" class= "btn btn-danger">                            
-                    </form>
-                </div>
-            </div>            
         </li>
     </ul>

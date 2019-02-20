@@ -1,0 +1,48 @@
+<ul class="list-group">
+    <li class="list-group-item list-group-item-info">
+        <h3 class="list-group-item-header">{{plate}}</h3>
+    </li>
+    <li class="list-group-item">
+        <div class="card">
+            <div class="row h-100">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-end">
+                        <a href="/api/planes/edit/{{_id}}"><i class="fas fa-edit  fa-2x"></i></a>
+                    </div>
+                </div>
+                <div class="row h-100">
+                    <div class="col-md-4">
+                        <img src="/images/{{_id}}.{{extension}}" alt="imagen" class="card-img-top center"
+                            style="width:50%; ">
+                        <div class="card-body">
+                            <h4 class="card-title">{{plate}}</h4>
+                            <h5 class="card-title">{{model.brand.brand}} {{model.model}}</h5>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <h5>
+                            <pre>Estado:                             {{status}}</pre>
+                        </h5>
+                        <h5>
+                            <pre>Disponibilidad:                     {{availability}}</pre>
+                        </h5>
+                        <h5 type="date">
+                            <pre>Próxima parada de Mantenimiento:    {{nextMaintenanceFormated}}</pre>
+                        </h5>
+                        <h5>
+                            <pre>Horas:                              {{hours}}</pre>
+                        </h5>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer">
+                        <form method="POST" action="/api/plane/{{_id}}?_method=DELETE" class=" right-space">
+                            <input type="submit" value="Borrar" class="btn btn-danger btn-block btn-sm">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

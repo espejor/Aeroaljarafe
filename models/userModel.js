@@ -38,7 +38,11 @@ const UserSchema = new Schema({
     lastLogin: Date,
     // Control de intentos repetitivos de logueado fallido
     loginAttempts: { type: Number, required: true, default: 0 },
-    lockUntil: { type: Number }
+    lockUntil: { type: Number },
+    role: {
+        type: String,
+        enum: ["Alumno","Piloto","Instructor","Auxiliar"]
+    }
 })
 
 // Atributos Virtual

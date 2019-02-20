@@ -25,13 +25,7 @@ app.use('/api',api)
 app.use(express.static('public'));
 
 
-// Renderizado de vistas
-app.get('/logup',(req,res) => {
-    res.render('users/logup')
-})
-app.get('/login',(req,res) => {
-    res.render('users/login')
-})
+
 app.get('/', (req, res) => {
     res.render('index')
 })

@@ -1,12 +1,43 @@
-<ul id="listado" class="list-group">
-    <li class="list-group-item list-group-item-info">
-        <h3 class="list-group-item-header">Marcas de Aeronaves</h3>
-    </li>
+
+    <ul id="listado" class="list-group">
+        <li class="list-group-item list-group-item-info">
+            <h3 class="list-group-item-header">Lista de Modelos de Aeronaves</h3>
+        </li>
+        <div class="row h-100">
         {{# each models}}
-            <li class="list-group-item">
-                {{_id}}
-                {{brand.brand}}
-                {{model}}               
-            </li>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="d-flex justify-content-end">
+                        <a href="/api/models/edit/{{_id}}"><i class="fas fa-edit  fa-2x"></i></a>
+                    </div>
+                        <a href="/api/model/{{_id}}"><img src="/images/{{_id}}.{{extension}}" alt="imagen"  class="card-img-top center " style="width:100%"></a> 
+                    <div class="card-body">
+                        <h5 class="card-title">{{brand.brand}} {{model}}</h5>
+                    </div>
+                    <div class="card-footer">
+
+                        <form method="POST" action="model/{{_id}}?_method=DELETE" class= "link right-space">
+                            <input type= "submit" value="Borrar" class= "btn btn-danger btn-block btn-sm" >                            
+                        </form>
+                    </div>
+                </div> 
+                <div>
+                    <p></p>
+                </div>            
+            </div>
         {{/each}}
-</ul>
+        </div>
+        <li class="list-group-item list-group-item-info">
+            <div class="row">
+                <div class="col-md-10">
+
+                </div>
+                <div class="col-md-2">
+                    <form method="GET" action="models/new" class= "link right-space">
+                        <input type= "submit" value="Nuevo" class= "btn btn-primary">
+                    </form>            
+                </div>                
+            </div>
+
+        </li>
+    </ul>

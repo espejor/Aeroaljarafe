@@ -8,3 +8,60 @@ body{
     background: -webkit-linear-gradient(to right, #fff, #076585);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #fff, #076585); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.error-container{
+    max-width: 380px;
+    _width: 480px;
+    margin: 0 auto;
+}
+/* input::-moz-focus-inner {padding: 0;border: 0;} */
+.error-container h2{
+    color: #D35780;
+    margin: 0 10px;
+    font-size: 40px;
+    text-align: center;
+}
+
+.error-container h2 span{
+    color: #bbb;
+    font-size: 80px;
+}
+
+.error-container p{
+    margin: 1em 0;
+}
+
+.body-error{
+    max-width:700px; 
+    _width: 700px; 
+    padding: 30px 20px 50px; 
+    border: 1px solid #b3b3b3;
+    border-radius: 4px;
+    margin: 0 auto; 
+    box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+    background: #fcfcfc;
+}
+
+.footer-text{
+    font-family: Overpass, "Lucida Console", Monaco, monospace;
+    font-size: 0.7rem;
+    color: #767676
+}
+
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}

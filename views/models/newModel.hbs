@@ -1,0 +1,36 @@
+
+    <ul  class="list-group">
+        <li class="list-group-item list-group-item-info">
+            <h3 class="list-group-item-header">Nuevo Modelo de Aeronave</h3>
+        </li>
+        <li class="list-group-item" >
+            <form id="newModel" method="POST" enctype="multipart/form-data" name="newModel" action="/api/model">
+                {{!-- <div class="row"> --}}
+                    {{!-- <div class="col-md-12"> --}}
+                <div class="form-group">
+                    <label for = "brand">Marca</label>    
+                    <select name="brand" class="form-control">                    
+                    {{# each brands}}
+                    <option value="{{_id}}">{{brand}}</option> 
+                    {{/each}}
+                    </select>
+
+                    <label for = "model">Modelo</label>
+                    <input type="text" id = "model" name="model" placeholder="Modelo de avión" required="true" class="form-control">
+                </div>
+                <div>
+                    <label for="image">Imagen</label>
+                    <input type="file" name="image" id="image" class="form-control">
+                </div>
+                    {{!-- </div>
+                </div> --}}
+                <div class="row mt-5">
+                    {{!-- <div class="col-md-9"></div> --}}
+                    <div class="col-xs-12 col-sm-6">
+                            {{!-- <input type= "submit" value="Cancelar" class= "link btn btn-secondary">                             --}}
+                            <input type= "submit" value="Guardar" class= "btn btn-success">
+                    </div>
+                </div>
+            </form>  
+        </li>
+    </ul>

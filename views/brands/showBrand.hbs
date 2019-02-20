@@ -1,29 +1,29 @@
 
     <ul  class="list-group">
         <li class="list-group-item list-group-item-info">
-            <h3 class="list-group-item-header">Marca de Aeronaves</h3>
+            <h3 class="list-group-item-header">{{brand}}</h3>
         </li>
         <li class="list-group-item" >
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>{{brand}}</h3><p><small>id: {{_id}}</small></p>
+            <div class="row h-100">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="d-flex justify-content-end">
+                            <a href="/api/brands/edit/{{_id}}"><i class="fas fa-edit  fa-2x"></i></a>
+                        </div>
+                            <img src="/images/{{_id}}.{{extension}}" alt="imagen"  class="card-img-top center" style="width:50%; ">
+                        <div class="card-body">
+                            <h5 class="card-title">{{brand}}</h5>
+                        </div>
+                        <div class="card-footer">
+                            <form method="POST" action="/api/brand/{{_id}}?_method=DELETE" class= "link right-space">
+                                <input type= "submit" value="Borrar" class= "btn btn-danger btn-block btn-sm" >                            
+                            </form>
+                        </div>
+                    </div> 
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <img src="/images/{{_id}}.{{extension}}" alt="imagen" width="200" class="img-fluid" >
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10"></div>
-                <div class="col-md-2">
-                    <form method="POST" action="brand/{{_id}}?_method=PUT" class= "link right-space">
-                        <input type= "submit" value="Editar" class= "btn btn-info">
-                    </form>
-                    <form method="POST" action="brand/{{_id}}?_method=DELETE" class= "link right-space">
-                        <input type= "submit" value="Borrar" class= "btn btn-danger">                            
-                    </form>
-                </div>
-            </div>            
         </li>
     </ul>
+
+
+

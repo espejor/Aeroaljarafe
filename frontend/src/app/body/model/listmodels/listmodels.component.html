@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <h2>Lista de Modelos de Aeronaves</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Modelo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let model of models">
+                <td>
+                  <a>
+                    <img
+                      src="../../../../assets/images/{{ model._id }}.{{
+                        model.extension
+                      }}"
+                      alt="imagen"
+                      class="card-img-top "
+                    />
+                  </a>
+                </td>
+                <td>
+                  {{ model.brand.brand }}
+                  {{ model.model }}
+                </td>
+                <td>
+                  <div class="d-flex justify-content-end">
+                    <a [routerLink]="['/model/edit', model._id]"
+                      ><i class="fa fa-edit  fa-2x"></i
+                    ></a>
+                  </div>
+                </td>
+                <td>
+                  <div class="">
+                    <i
+                      class="fa fa-trash  fa-2x"
+                      (click)="this.deleteModel(model._id)"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <form class="link right-space">
+            <input
+              type="submit"
+              value="Nuevo"
+              class="btn btn-primary"
+              [routerLink]="['/models/new']"
+            />
+          </form>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+    </div>
+  </div>
+  

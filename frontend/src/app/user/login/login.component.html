@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+      <div class="text-center">
+        <form class="form-signin">
+          <img
+            class="mb-4 rounded-pill"
+            src="../../../assets/images/varios/aeroaljarafeLogo.jpg"
+            alt=""
+          />
+          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input
+            [(ngModel)]="user.email"
+            name="email"
+            type="email"
+            id="inputEmail"
+            class="form-control"
+            placeholder="Email address"
+            required
+            autofocus
+          />
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input
+            [(ngModel)]="user.password"
+            name="password"
+            type="password"
+            id="inputPassword"
+            class="form-control"
+            placeholder="Password"
+            required
+          />
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me" /> Remember me
+            </label>
+          </div>
+          <button class="btn btn-lg btn-primary btn-block" (click) = "login()" type="submit">
+            Login
+          </button>
+          <a [routerLink]="['/signup']" class="">No tengo cuenta</a>
+          <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
+</div>

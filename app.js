@@ -6,11 +6,13 @@ const hbs = require('express-handlebars')   // Motor de plantillas Handlebars
 const app = express()
 const api = require('./routes')(express)
 const methodOverride = require('method-override')
+const cors = require('cors')
 
 
 // Cargamos los middleware
 app.use(bodyParser.urlencoded({extended:false}))
-app.use(bodyParser.json())
+app.use(express.json())
+app.use(cors())
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
 // Configuramos el motor de plantillas 

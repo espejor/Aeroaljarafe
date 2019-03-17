@@ -9,16 +9,8 @@ const PlaneSchema = new Schema({
     model: {type: Schema.ObjectId,ref: "Model"},
     plate: {type:String,required:true},
     extension:{type:String,required:true},   // Extensión del archivo de imagen
-    status: {
-        type:String,
-        enum:["Operativo","Averiado","Mantenimiento"],
-        default: "Operativo"
-    },
-    availability: {
-        type:String,
-        enum:["Disponible","Reservado","No disponible"],
-        default: "Disponible"
-    },
+    status: {type: Schema.ObjectId,ref: "Availability"},
+    availability: {type: Schema.ObjectId,ref: "Status"},
     nextMaintenance:Date,
     hours: {type:Number, default:0}
 })
@@ -40,19 +32,23 @@ PlaneSchema.pre("remove",function (next){
 
 PlaneSchema.post("save",doc => {
     updateRefs.incRef(doc.model)
+    updateRefs.incRef(doc.availability)
+    updateRefs.incRef(doc.status)
 })
 
 
 PlaneSchema.post("remove",doc => {
-    updateRefs.decRef(doc.model)
+    updateRefs.incRef(doc.model)
+    updateRefs.incRef(doc.availability)
+    updateRefs.incRef(doc.status)
 })
 
-PlaneSchema.statics.getStatusOptions = function(){
-    return this.schema.paths.status.enumValues
-}
+// PlaneSchema.statics.getStatusOptions = function(){
+//     return this.schema.paths.status.enumValues
+// }
 
-PlaneSchema.statics.getAvailabilityOptions = function(){
-    return this.schema.paths.availability.enumValues
-}
+// PlaneSchema.statics.getAvailabilityOptions = function(){
+//     return this.schema.paths.availability.enumValues
+// }
 
 module.exports = mongoose.model('Plane',PlaneSchema)

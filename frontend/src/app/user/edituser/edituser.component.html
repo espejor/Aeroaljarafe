@@ -1,0 +1,224 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <h1 class="h3 mb-3 font-weight-normal">
+        Usuario <small>{{ user.personalData.displayName }}</small>
+      </h1>
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-item nav-link active"
+            id="nav-home-tab"
+            data-toggle="tab"
+            href="#nav-home"
+            role="tab"
+            aria-controls="nav-home"
+            aria-selected="true"
+            >Datos personales</a
+          >
+          <a
+            class="nav-item nav-link"
+            id="nav-profile-tab"
+            data-toggle="tab"
+            href="#nav-profile"
+            role="tab"
+            aria-controls="nav-profile"
+            aria-selected="false"
+            >Datos de piloto</a
+          >
+          <a
+            class="nav-item nav-link"
+            id="nav-contact-tab"
+            data-toggle="tab"
+            href="#nav-contact"
+            role="tab"
+            aria-controls="nav-contact"
+            aria-selected="false"
+            >Datos de conexión</a
+          >
+        </div>
+      </nav>
+
+      <form
+        id="editUser"
+        method="post"
+        enctype="multipart/form-data"
+        name="editUser"
+        (ngSubmit)="saveUser()"
+      >
+        <div class="tab-content" id="nav-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="nav-home"
+            role="tabpanel"
+            aria-labelledby="nav-home-tab"
+          >
+            <div>
+              <div class="form-group">
+                <label for="displayName">Nombre</label>
+                <input
+                  type="text"
+                  [(ngModel)]="user.personalData.displayName"
+                  id="displayName"
+                  name="displayName"
+                  placeholder="Nombre"
+                  required="true"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="address">Dirección</label>
+                <input
+                  type="text"
+                  [(ngModel)]="user.personalData.address"
+                  id="address"
+                  name="address"
+                  placeholder="Dirección"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Avatar</label>
+                <input
+                  type="text"
+                  [(ngModel)]="user.personalData.avatar"
+                  name="avatar"
+                  id="avatar"
+                  placeholder="Avatar"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="nav-profile"
+            role="tabpanel"
+            aria-labelledby="nav-profile-tab"
+          >
+            <div>
+              <div class="form-group">
+                <label for="licence">Licencia</label>
+                <input
+                  type="text"
+                  [(ngModel)]="user.pilotData.licence"
+                  id="licence"
+                  name="licence"
+                  placeholder="Licencia"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="dataExpeditionLicence"
+                  >Fecha de Expedición de la Licencia</label
+                >
+                <input
+                  type="date"
+                  [(ngModel)]="user.pilotData.dataExpeditionLicence"
+                  id="dataExpeditionLicence"
+                  name="dataExpeditionLicence"
+                  placeholder="Fecha de Expedición de la Licencia"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="dataExpirationLicence"
+                  >Fecha de Expiración de la Licencia</label
+                >
+                <input
+                  type="date"
+                  [(ngModel)]="user.pilotData.dataExpirationLicence"
+                  id="dataExpirationLicence"
+                  name="dataExpirationLicence"
+                  placeholder="Fecha de Expiración de la Licencia"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="dataExpirationMedicalExamination"
+                  >Fecha de Expiración del Reconocimiento Médico</label
+                >
+                <input
+                  type="date"
+                  [(ngModel)]="user.pilotData.dataExpirationMedicalExamination"
+                  id="dataExpirationMedicalExamination"
+                  name="dataExpirationMedicalExamination"
+                  placeholder="Fecha de Expiración del Reconocimiento Médico"
+                  class="form-control"
+                />
+              </div>
+              <label for="aircraftsQualification">Agregar Calificación</label>
+              <div class="form-group">
+                  <div class="form-check"  *ngFor = "let model of modelsOptions; let i = index">
+                      <input 
+                        class="form-check-input" 
+                        type="checkbox"  
+                        [checked]="modelsSelected[i]" 
+                        (change)="modelsSelected[i] = !modelsSelected[i]"
+                        name= "aircraftsQualification">
+                      <label class="form-check-label" >
+                          {{model.option.brand.brand}}{{model.option.model}}
+                      </label>
+                    </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="nav-contact"
+            role="tabpanel"
+            aria-labelledby="nav-contact-tab"
+          >
+            <div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  [(ngModel)]="user.accessData.email"
+                  name="email"
+                  id="email"
+                  placeholder="Tu email"
+                  required="true"
+                  class="form-control"
+                />
+                <small id="emailHelp" class="form-text text-muted"
+                  >We'll never share your email with anyone else.</small
+                >
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  [(ngModel)]="user.accessData.password"
+                  name="password"
+                  id="password"
+                  placeholder="Tu contraseña"
+                  required="true"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="passwordConfirmation">Repita Password</label>
+                <input
+                  type="password"
+                  name="passwordConfirmation"
+                  id="passwordConfirmation"
+                  placeholder="Repite tu contraseña"
+                  required="true"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary">
+          Guardar
+        </button>
+      </form>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+</div>

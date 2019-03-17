@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-info">
+          <h3 class="list-group-item-header">Editar {{ brand.brand }}</h3>
+        </li>
+        <li class="list-group-item">
+          <div class="row h-100">
+
+              <div class="card">
+                <div style="text-align: center">
+                 <img
+                  src="../../../../assets/images/{{ brand._id }}.{{
+                    brand.extension
+                  }}"
+                  alt="imagen"
+                  class="card-img-top center"
+                  style="width:50%"
+                /> 
+                </div>
+                <form
+                  method="POST"
+                  (ngSubmit)="saveBrand($event.target)"
+                  class="link right-space"
+                  enctype="multipart/form-data"
+                >
+                <div class="form-group">
+                    <label for="brand" style="padding-left: 6px">
+                      Marca
+                    </label>
+                    <input
+                      type="text"
+                      id="brand"
+                      name="brand"
+                      placeholder="Marca de avión"
+                      required="true"
+                      class="form-control"
+                      [(ngModel)]="brand.brand"
+                    />
+                  </div>
+                <div class="custom-file">
+                    <input
+                      type="file"
+                      class="custom-file-input form-control "
+                      name="image"
+                      id="image"
+                      (change)="uploadImage($event.target.files)"
+                    />
+                    <label id="image-label" class="custom-file-label" for="image"
+                      >Imagen</label
+                    >
+                  </div>
+                  <div class="card-footer">
+                    <input
+                      type="submit"
+                      value="Guardar"
+                      class="btn btn-success btn-block btn-sm"
+                    />
+                  </div>
+                </form>
+              </div>
+
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
+</div>

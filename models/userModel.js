@@ -21,28 +21,42 @@ passwordValidation = {
 }
 
 
-
 // Creamos el Schema
 const UserSchema = new Schema({
-    mail: {type: String, unique:true, lowercase: true,required: true, match:REGEX},
-    displayName: String,
-    avatar: String,  // URL del Avatar
-    password: {
-        type: String, 
-        select: false,
-        minlength: 8,
-        required: true,
-        validate: passwordValidation
+    accessData:{
+        email: {type: String, unique:true, lowercase: true,required: true, match:REGEX},
+        password: {
+            type: String, 
+            select: false,
+            minlength: 8,
+            required: true,
+            validate: passwordValidation
+        },
+        signupDate: {type: Date, default: Date.now()},
+        lastLogin: Date,
+        // Control de intentos repetitivos de logueado fallido
+        loginAttempts: { type: Number, required: true, default: 0 },
+        lockUntil: { type: Number },
+        role: {
+            type: String,
+            enum: ["Alumno","Piloto","Instructor","Auxiliar"],
+            default: "Piloto"
+        }
     },
-    signupDate: {type: Date, default: Date.now()},
-    lastLogin: Date,
-    // Control de intentos repetitivos de logueado fallido
-    loginAttempts: { type: Number, required: true, default: 0 },
-    lockUntil: { type: Number },
-    role: {
-        type: String,
-        enum: ["Alumno","Piloto","Instructor","Auxiliar"]
-    }
+
+    personalData:{
+        address:    String,
+        avatar:    String,      // URL del Avatar
+        displayName:    String
+    },
+
+    pilotData:{
+        licence:                String,
+        dataExpirationLicence:  Date,
+        dataExpeditionLicence:  Date,
+        dataExpirationMedicalExamination: Date,
+        aircraftsQualification: [{type: Schema.ObjectId,ref: "Model"}]
+    }    
 })
 
 // Atributos Virtual
@@ -120,7 +134,7 @@ UserSchema.methods.incLoginAttempts = function(cb) {
 // Función para autenticarse
 UserSchema.statics.getAuthenticated = function(req, cb) {
 
-    this.findOne({ mail:req.body.email},'mail +password', function(err, user) {
+    this.findOne({ email:req.body.email},'email +password', function(err, user) {
         if (err) return cb(err);
 
         // make sure the user exists
@@ -167,10 +181,10 @@ UserSchema.statics.getAuthenticated = function(req, cb) {
 
 // Librería para asignar una avatar
 UserSchema.methods.gravatar = function (){
-    // Si no hay mail se asigna un avatar por defecto
-    if(!this.mail) return `https://gravatar.com/avatar/?s=200&d=retro`
+    // Si no hay email se asigna un avatar por defecto
+    if(!this.email) return `https://gravatar.com/avatar/?s=200&d=retro`
     // en otro caso
-    const md5 = crypto.createHash('md5').update(this.mail).digest('hex')
+    const md5 = crypto.createHash('md5').update(this.email).digest('hex')
     return `https://gravatar.com/avatar/${md5}?s=200&d=retro`
 }
 

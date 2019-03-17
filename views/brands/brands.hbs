@@ -10,7 +10,7 @@
                     <div class="d-flex justify-content-end">
                         <a href="/api/brands/edit/{{_id}}"><i class="fas fa-edit  fa-2x"></i></a>
                     </div>
-                        <a href="/api/brand/{{_id}}"><img src="/images/{{_id}}.{{extension}}" alt="imagen"  class="card-img-top center " style="width:50%"></a> 
+                        <a href="/api/brand/{{_id}}"><img src="/images/{{_id}}.{{extension}}" alt="imagen"  class="card-img-top center img-fluid" style="width:50%"></a> 
                     <div class="card-body">
                         <h5 class="card-title">{{brand}}</h5>
                     </div>
@@ -27,31 +27,6 @@
                     <p></p>
                 </div>            
             </div>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar elemento</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ¿De verdad quieres eliminar el elemento?
-      </div>
-      <div class="modal-footer">
-          <form method="POST" action="/api/brand/{{_id}}?_method=DELETE" class= "link right-space">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <button type="submit" class="btn btn-primary">Eliminar</button></form>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
         {{/each}}
         </div>
         <li class="list-group-item list-group-item-info">
@@ -68,10 +43,4 @@
 
         </li>
     </ul>
-
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
 

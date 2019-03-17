@@ -1,0 +1,31 @@
+<div class="container">
+  <h2>{{ user.displayName }}</h2>
+  <div class="table-responsive">
+    <table class="table">
+      <tbody>
+        <tr >
+          <td>
+            <a [routerLink]="['/user/changeavatar',user._id]">
+              <div *ngIf="user.avatar; else elseBlock">{{ user.avatar }}</div>
+              <ng-template #elseBlock>
+                <i class="fa fa-user-circle fa-2x"></i> 
+              </ng-template>
+            </a>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.displayName }}</td>
+          <td>
+            <div class="d-flex justify-content-end">
+              <a [routerLink]="['/user',user._id]"><i class="fa fa-edit  fa-2x"></i></a>
+            </div>
+          </td>
+          <td>
+            <div class="">
+              <i class="fa fa-trash  fa-2x" (click)="this.deleteUser(user._id)" style="cursor: pointer; color: tomato;"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

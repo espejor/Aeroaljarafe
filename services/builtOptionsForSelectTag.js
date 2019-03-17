@@ -1,8 +1,7 @@
 "use strict"
 
 module.exports = 
-function 
-buildOptions(arrayOptions,optionSelected){
+function buildOptions(arrayOptions,optionSelected){
     let options = []
     arrayOptions.forEach(element => {
         if (element instanceof String){

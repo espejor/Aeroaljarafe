@@ -21,7 +21,7 @@ ModelSchema.pre("remove",function (next){
             return next()
         }   
     }).catch(err => {
-        console.log(err)
+        console.error(err)
     })
 })
 

@@ -4,7 +4,6 @@ const Model = require('../models/modelModel')
 const Brand = require('../models/brandModel')
 const formidable = require("formidable")
 const fs = require("fs")
-const buildOptions = require("../services/builtOptionsForSelectTag")
 
 
 function getModel(req,res){
@@ -12,9 +11,12 @@ function getModel(req,res){
     Model.findById(modelId).populate("brand").exec((err,model) => {
         if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
         if (!model) return res.status(404).send({message: `No se encuentra en la BD`})
-        res.locals.title = "Ver modelo " + model.brand.brand + " " + model.model
-        res.locals.model = model
-        res.render("models/showModel",res.locals.model)
+        // res.locals.title = "Ver modelo " + model.brand.brand + " " + model.model
+        // res.locals.model = model
+        // res.render("models/showModel",res.locals.model)
+        Brand.populate(model,{path:"brand"},(err,model) =>{
+            res.status(200).send({ model });
+        })        
     })
 }
 
@@ -24,71 +26,46 @@ function getModels(req,res){
         if (!models) return res.status(404).send({message: `No se existen Modelos en la BD`})
         
         Brand.populate(models,{path:"brand"},(err,models) =>{
-            res.locals.models = models
-            res.locals.title = "Lista de modelos"
-            res.render("models/models",res.locals.models)
+            res.status(200).send({ models });
         })
 
     })
 }
-
-function saveModel(req,res){
+function saveModel(req, res) {
     var form = new formidable.IncomingForm();
-    form.keepExtensions = true
+    form.keepExtensions = true;
     form.parse(req, function(err, fields, files) {
-
-        let extension = files.image.name.split(".").pop()
-
-        // Creamos un nuevo objeto Modelo
-        let model = new Model()
-        // Y le asignamos las propiedades pasados por POST
-        model.model = fields.model
-        model.brand = fields.brand
-        model.extension = extension
-        // Salvamos la nueva Modelo en la BD
-        model.save((err,modelStored) => {
-            if (err) 
-                return res.status(500).send({message: `Error al guardar en la BD: ${err}`})
-            let newFile = model._id + "." + extension
-            fs.rename(files.image.path,"public/images/" +  newFile)
-            console.log(modelStored)
-            //res.locals.model = modelStored
-            res.redirect("/api/models")
-        })  
-    })
-}
-
-
-function newModel(req,res){
-    Brand.find({}, (err,brands) => {
-        res.locals.brands = brands
-        res.locals.title = "Nuevo Modelo"
-        res.render("models/newModel",res.locals.brands)
-    })
-   
-}
-
-function editModel(req,res){
-    let modelId = req.params.modelId
-    Model.findById(modelId).populate({path:"brand"}).exec((err,model) => {
-        if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
-        if (!model) return res.status(404).send({message: `No se encuentra en la BD`})
-
-        res.locals.model = model     
-        Brand.find({},(err,brands) => {
-            res.locals.brands = buildOptions(builtListOfItems(brands,"brand"),model.brand.brand)
-            res.render("models/editModel",res.locals)
-        })
-    })
-}
-
-function builtListOfItems (listOfObjects,fieldToList){
-    let newArray = []
-    listOfObjects.forEach(object => {
-        newArray.push({_id: object._id,value: object[fieldToList]})
+      if (err) 
+        return res.status(500).send({ message: err.message });
+      let extension = files.image.name.split(".").pop();
+  
+      // Creamos un nuevo objeto Marca
+      let model = new Model();
+      // Y le asignamos las propiedades pasados por POST
+      model.model = fields.model;
+      model.extension = extension;
+      model.brand = fields.brand;
+      // Salvamos la nueva Marca en la BD
+      model.save((err, modelStored) => {
+        if (err)
+          res.status(500).send({ message: `Error al guardar en la BD: ${err}` });
+        let newFile = model._id + "." + extension;
+        fs.rename(
+          files.image.path,
+          "./frontend/src/assets/images/" + newFile,
+          function(err) {
+            if (err) throw err;
+            console.log("renamed complete");
+          }
+        );
+        console.log(modelStored);
+        //res.locals.model = modelStored
+        res.status(200).send(modelStored);
+      });
     });
-    return newArray
-}
+  }
+
+
 
 
 
@@ -132,33 +109,41 @@ function updateModel(req,res){
 }
 
 
-function deleteModel(req,res){
-    let modelId = req.params.modelId
-    Model.findById(modelId,(err,model) => {
-        if (err) return res.status(500).send({message: `Error en la petición: ${err}`})
-        if (!model) return res.status(404).send({message: `No se encuentra en la BD`})
-
-        model.remove(err => {
-            if (err)  
-                return res.status(500).send({message: `Error en la petición: ${err}`})
-            // Borramos el archivo de imagen de la carpeta public
-            let oldFile = modelId + "." + model.extension
-            fs.unlink("public/images/" +  oldFile,(err) => {
-                if (err)return res.status(500).send({message: `Error en la petición: ${err}`})
-            })
-            console.log(`Elemento borrado: ${model}`)
-            res.redirect("/api/models")
-        })    
-    })
-}
+function deleteModel(req, res) {
+    let modelId = req.params.modelId;
+    Model.findById(modelId, (err, model) => {
+      if (err)
+        return res.status(500).send({ message: `Error en la petición: ${err}` });
+      if (!model)
+        return res.status(404).send({ message: `No se encuentra en la BD` });
+  
+      model.remove(err => {
+          if (err)
+              throw err;
+          else{
+              console.log(`Elemento borrado: ${model}`);                   
+  
+              // Borramos el archivo de imagen de la carpeta public
+              let oldFile = modelId + "." + model.extension;
+              fs.unlink("./frontend/src/assets/images/" + oldFile, err => {
+                if (err){
+                  console.error(err.stack);
+                  res.status(500).send('Something broke!');
+                }else{
+                      console.log(`Imagen borrada`);
+                      res.send({ message: `Elemento borrado: ${model}`, model });
+                  }
+              });
+          }
+      });
+    });
+  }
 
 module.exports = {
     getModel,
     getModels,
     saveModel,
     updateModel,
-    deleteModel,
-    editModel,
-    newModel
+    deleteModel
 }
 

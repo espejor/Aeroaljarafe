@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <form
+        id="signup"
+        method="post"
+        enctype="multipart/form-data"
+        name="signup"
+      >
+      <img
+        class="mb-4 rounded-pill"
+        src="/images/varios/aeroaljarafeLogo.jpg"
+        alt=""
+      />
+      <h1 class="h3 mb-3 font-weight-normal">Registro</h1>
+        <div class="form-group">
+          <label for="displayName">Nombre</label>
+          <input
+            type="text"
+            [(ngModel)]="user.displayName"
+            id="displayName"
+            name="displayName"
+            placeholder="Nombre"
+            required="true"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            [(ngModel)]="user.email"
+            name="email"
+            id="email"
+            placeholder="Tu email"
+            value="mi@email.com"
+            required="true"
+            class="form-control"
+          />
+          <small id="emailHelp" class="form-text text-muted"
+            >We'll never share your email with anyone else.</small
+          >
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            [(ngModel)]="user.password"
+            name="password"
+            id="password"
+            placeholder="Tu contraseña"
+            required="true"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="passwordConfirmation">Repita Password</label>
+          <input
+            type="password"
+            [(ngModel)]="user.passwordConfirmation"
+            name="passwordConfirmation"
+            id="passwordConfirmation"
+            placeholder="Repite tu contraseña"
+            required="true"
+            class="form-control"
+          />
+        </div>
+        <input
+          type="submit"
+          (click)="this.newUser()"
+          value="Registrar"
+          class="btn btn-primary"
+        />
+        <a [routerLink]="['/login']" class="p-2 bd-highlight"  
+          >Ya tengo cuenta</a
+        >
+      </form>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+</div>

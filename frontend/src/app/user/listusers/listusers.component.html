@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <h2>Usuarios</h2>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Avatar</th>
+              <th scope="col">Email</th>
+              <th scope="col">Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>
+                <a [routerLink]="['/user/show', user._id]">
+                  <div *ngIf="user.avatar; else elseBlock">
+                    {{ user.personalData.avatar }}
+                  </div>
+                  <ng-template #elseBlock>
+                    <i class="fa fa-user-circle fa-2x"></i>
+                  </ng-template>
+                </a>
+              </td>
+              <td>{{ user.accessData.email }}</td>
+              <td>{{ user.personalData.displayName }}</td>
+              <td>
+                <div class="d-flex justify-content-end">
+                  <a [routerLink]="['/user/edit', user._id]"
+                    ><i class="fa fa-edit  fa-2x"></i
+                  ></a>
+                </div>
+              </td>
+              <td>
+                <div class="">
+                  <i
+                    class="fa fa-trash  fa-2x"
+                    (click)="this.deleteUser(user._id)"
+                    style="cursor: pointer; color: tomato;"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-lg-3"></div>
+  </div>
+</div>

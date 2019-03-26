@@ -6,6 +6,10 @@ import { ListmodelsComponent } from './listmodels/listmodels.component';
 import { EditmodelComponent } from './editmodel/editmodel.component';
 import { ModelRoutingModule } from './model-routing.module';
 import { NewmodelComponent } from './newmodel/newmodel.component';
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { ImgcropperModule } from '../imgcropper/imgcropper.module';
 
 
 @NgModule({
@@ -17,7 +21,11 @@ import { NewmodelComponent } from './newmodel/newmodel.component';
   imports: [
     CommonModule,
     FormsModule,
-    ModelRoutingModule
+    ModelRoutingModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    ConfirmationPopoverModule,
+    ImgcropperModule
   ],
   providers: [
     ModelService

@@ -4,9 +4,9 @@ const auth = require('../../middlewares/auth')
 
 module.exports = function(api){
 
-    // Verbos Availabilitys
-    //api.get("/availabilitys/edit/:availabilityId",availabilityCtrl.editAvailability)
-    api.get("/availabilitys",auth, availabilityCtrl.getAvailabilitys)
+    // Verbos Availabilities
+    //api.get("/availabilities/edit/:availabilityId",availabilityCtrl.editAvailability)
+    api.get("/availabilities",auth, availabilityCtrl.getAvailabilities)
     api.get("/availability/:availabilityId", availabilityCtrl.getAvailability)
     api.post("/availability",availabilityCtrl.saveAvailability)
     api.put("/availability/:availabilityId",availabilityCtrl.updateAvailability)

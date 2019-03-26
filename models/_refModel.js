@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const RefSchema = new Schema({
-    coleccion: {type:Schema.ObjectId, required: true},
+    coleccion: {type:Schema.ObjectId},
     cant: Number
 })
 

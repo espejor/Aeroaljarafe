@@ -10,7 +10,7 @@ export class AvailabilityService {
 
   // Atributos
   private domain = "http://localhost:3000"
-  private availabilitysUrl = '/api/availabilitys';  // URL to web api
+  private availabilitiesUrl = '/api/availabilities';  // URL to web api
   private availabilityUrl = '/api/availability';  // URL to web api
 
 
@@ -26,8 +26,8 @@ export class AvailabilityService {
   constructor(
     private httpService: HttpService) { }
   // Methods
-  getAvailabilitys():Observable<any>{
-    return this.httpService.getList(`${this.domain}${this.availabilitysUrl}`)
+  getAvailabilities():Observable<any>{
+    return this.httpService.getList(`${this.domain}${this.availabilitiesUrl}`)
   }
 
   newAvailability(availability:any):Observable<any>{

@@ -4,8 +4,6 @@ import { User } from "./user.model";
 import { Observable, of } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { HttpService } from "../http.service";
-import { ErrorsService } from "../errors/errors.service";
-
 const httpOptions = {
   headers: new HttpHeaders({ "Content-Type": "application/json" })
 };
@@ -25,8 +23,7 @@ export class UserService {
   // Constructor
   constructor(
     private http: HttpClient,
-    private httpService: HttpService,
-    private errorService: ErrorsService
+    private httpService: HttpService
   ) {}
   // Methods
   getUsers(): Observable<any> {
@@ -38,10 +35,11 @@ export class UserService {
   }
 
   login(user: User): Observable<any> {
-    return this.http.post(this.domain + this.signInUrl, user, httpOptions).pipe(
-      tap(res => console.log(`Recibido Token: ${res}`)),
-      catchError(this.errorService.handleError<User>("login"))
-    );
+    return this.http.post(this.domain + this.signInUrl, user, httpOptions)
+    // .pipe(
+    //   tap(res => console.log(`Recibido Token: ${res}`)),
+    //   catchError(this.errorService.handleError<User>("login"))
+    // );
   }
 
   logout() {
@@ -60,10 +58,10 @@ export class UserService {
     const id = user._id;
     return this.http
       .put(this.domain + this.userUrl + "/avatar", user, httpOptions)
-      .pipe(
-        tap(_ => console.log(`updated item id=${id}`)),
-        catchError(this.errorService.handleError<any>("updateAvatar"))
-      );
+      // .pipe(
+      //   tap(_ => console.log(`updated item id=${id}`)),
+      //   catchError(this.errorService.handleError<any>("updateAvatar"))
+      // );
   }
 
   deleteUser(id: string): Observable<any> {

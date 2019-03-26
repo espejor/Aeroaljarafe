@@ -3,8 +3,11 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
+const updateRefs = require('../services/_updateReferences')
+
 const AvailabilitySchema = new Schema({
-    availability: {type:String, required: true} 
+    availability: {type:String, required: true} ,
+    extension:{type:String,required:true}   // Extensión del archivo de imagen
 })
 
 

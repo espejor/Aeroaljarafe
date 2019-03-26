@@ -7,8 +7,8 @@ const updateRefs = require('../services/_updateReferences')
 const PlaneSchema = new Schema({
     //brand: {type: Schema.ObjectId,ref: "Brand"},
     model: {type: Schema.ObjectId,ref: "Model"},
-    plate: {type:String,required:true},
-    extension:{type:String,required:true},   // Extensión del archivo de imagen
+    plate: {type:String,required:[true, 'La matrícula de la Aeronave es obligatoria']},
+    extension:{type:String,required:[true, 'Una imagen de la Aeronave es obligatoria']},   // Extensión del archivo de imagen
     status: {type: Schema.ObjectId,ref: "Availability"},
     availability: {type: Schema.ObjectId,ref: "Status"},
     nextMaintenance:Date,

@@ -15,15 +15,15 @@ function getAvailability(req, res) {
   });
 }
 
-function getAvailabilitys(req, res) {
-  Availability.find({}, (err, availabilitys) => {
+function getAvailabilities(req, res) {
+  Availability.find({}, (err, availabilities) => {
     if (err)
       return res.status(500).send({ message: `Error en la petición: ${err}` });
-    if (!availabilitys)
+    if (!availabilities)
       return res.status(404).send({ message: `No se existen Marcas en la BD` });
     res.locals.title = "Lista de Marcas";
 
-    res.status(200).send({ availabilitys });
+    res.status(200).send({ availabilities });
   });
 }
 
@@ -141,9 +141,9 @@ function deleteAvailability(req, res) {
                 console.error(err.stack);
                 res.status(500).send('Something broke!');
               }else{
-                    console.log(`Imagen borrada`);
-                    res.send({ message: `Elemento borrado: ${availability}`, availability });
-                }
+                console.log(`Imagen borrada`);
+                res.send({ message: `Elemento borrado: ${availability}`, availability });
+              }
             });
             
             
@@ -155,7 +155,7 @@ function deleteAvailability(req, res) {
 
 module.exports = {
   getAvailability,
-  getAvailabilitys,
+  getAvailabilities,
   saveAvailability,
   updateAvailability,
   deleteAvailability

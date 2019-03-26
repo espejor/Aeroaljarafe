@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BrandService } from '../brand.service';
 import { Brand } from '../brand.model';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ImgcropperService } from '../../imgcropper/imgcropper.service';
 
 @Component({
   selector: 'app-newbrand',
@@ -10,8 +12,15 @@ import { Router } from '@angular/router';
 })
 export class NewbrandComponent implements OnInit {
   brand: Brand = new Brand();
+
+  image$ : Observable<any>
+  image: File
   
-  constructor(private brandService:BrandService, private newRoute:Router) { 
+  constructor(
+    private brandService:BrandService, 
+    private newRoute:Router,
+    private imgCropperService:ImgcropperService
+  ) { 
     // this.brand.brand=""
     // this.brand._id=""
     // this.brand.extension=""
@@ -19,6 +28,8 @@ export class NewbrandComponent implements OnInit {
 
 
   ngOnInit() {
+    this.image$ = this.imgCropperService.getImage$();
+    this.image$.subscribe(image => this.image = image);
   }
 
   files:File[]
@@ -31,6 +42,7 @@ export class NewbrandComponent implements OnInit {
   saveBrand(form): void {
 
     let formData:FormData = new FormData(form); 
+    formData.append("image",this.image,"image.png")
 
     this.brandService.newBrand(formData)
     .subscribe(res => {
@@ -38,6 +50,14 @@ export class NewbrandComponent implements OnInit {
       this.newRoute.navigate(['brands'])
     }, (err) => {
       console.log(err);
-    })
+    })  
+    console.log(this.image$)
+    console.log(this.image)
   }
+
+
+
+
+
+
 }

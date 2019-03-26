@@ -5,9 +5,9 @@ const Schema = mongoose.Schema
 const updateRefs = require('../services/_updateReferences')
 
 const ModelSchema = new Schema({
-    model: {type:String, required: true},
-    brand: {type: Schema.ObjectId,ref: "Brand", required: true},
-    extension:{type:String,required:true}   // Extensión del archivo de imagen
+    model: {type:String, required: [true, 'El nombre del Modelo es obligatorio']},
+    brand: {type: Schema.ObjectId,ref: "Brand", required: [true, 'El nombre de la Marca es obligatorio']},
+    extension:{type:String,required:[true, 'Una imagen del Modelo es obligatoria']}   // Extensión del archivo de imagen
 })
 
 ModelSchema.pre("remove",function (next){

@@ -1,0 +1,9 @@
+.fa-trash{
+    cursor: pointer; 
+    color: tomato;
+}
+
+img{
+    height: 5rem;
+    width: auto;
+}

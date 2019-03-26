@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ModelService } from "../model.service";
 import { Model } from "../model.model";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-listmodels",
@@ -9,7 +10,14 @@ import { Model } from "../model.model";
 })
 export class ListmodelsComponent implements OnInit {
   models: Model[];
-  constructor(private modelService: ModelService) {}
+
+  popoverTitle = "Eliminar un Modelo";
+  popoverMessage = "¿Está seguro que quiere eliminar el Modelo?";
+
+  constructor(
+    private modelService: ModelService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.getModels();
@@ -22,15 +30,17 @@ export class ListmodelsComponent implements OnInit {
     });
   }
 
-  deleteModel(id:string) {
-    if (confirm("¿Estás seguro que deseas eliminar el registro?")) {
-      this.modelService.deleteModel(id).subscribe(data => {
-        console.log(data)
-        this.deleteElementFromModels(data.model)
-      }, (err) => {
-        console.log(err);
-      })
-    }
+  deleteModel(id: string) {
+    this.modelService.deleteModel(id).subscribe(
+      data => {
+        console.log(data);
+        this.deleteElementFromModels(data.model);
+        this.toastr.success(`Se ha eliminado el Modelo: ${data.model.model}`,"¡OK!")
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   private deleteElementFromModels(model: Model) {

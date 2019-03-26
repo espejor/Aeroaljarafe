@@ -1,0 +1,64 @@
+<div class="custom-file">
+  <input
+    type="file"
+    class="custom-file-input form-control "
+    name="image"
+    id="image"
+    (change)="fileChangeEvent($event)"
+  />
+  <label id="image-label" class="custom-file-label" for="image"
+    >Cargar Imagen</label
+  >
+</div>
+
+<div class="imgContainer">
+  <image-cropper *ngIf = "imgLoaded"
+    class =" border rounded"
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="false"
+    [aspectRatio]="aspectRatio"
+    [resizeToWidth]="128"
+    [outputType]="both"
+    [format]="png"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded()"
+    (loadImageFailed)="loadImageFailed()"
+  ></image-cropper>
+</div>
+<div class="croppedImgContainer m-3 border rounded" *ngIf = "croppedImage">
+  <img [src]="croppedImage" class="p-1" />
+  <div class="botonera">
+    <button
+      type="button"
+      class="fa fa-undo fa-1.7x m-1 p-2 btn btn-light"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Rotar a la izquierda"
+      (click)="rotateLeft()"
+    ></button>
+    <button
+      type="button"
+      class="fa fa-undo fa-flip-horizontal fa-1.7x m-1 p-2 btn btn-light"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Rotar a la derecha"
+      (click)="rotateRight()"
+    ></button>
+    <button
+      type="button"
+      class="fa fa-exchange fa-1.7x m-1 p-2 btn btn-light"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Voltear horizontalmente"
+      (click)="flipHorizontal()"
+    ></button>
+    <button
+      type="button"
+      class="fa fa-exchange fa-rotate-90 fa-1.7x m-1 p-2 btn btn-light"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Voltear verticalmente"
+      (click)="flipVertical()"
+    ></button>
+  </div>
+</div>

@@ -1,8 +1,9 @@
+import { Model } from '../model/model.model';
+
 export class Plane {
     _id:string;
     plate: string;
-    model:any;
-    brand:any;
+    model:Model;
     extension: string;
     status: any;
     availability: any;

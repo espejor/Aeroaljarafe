@@ -8,16 +8,17 @@ const updateRefs = require('../services/_updateReferences')
 const modelName = 'Brand'
 
 const BrandSchema = new Schema({
-    brand: {type:String, required: true},
-    extension:{type:String,required:true}   // Extensión del archivo de imagen
+    brand: {type:String, required: [true, 'El nombre de la Marca es obligatorio']},
+    extension:{type:String,required:[true, 'Una imagen de la Marca es obligatoria']}   // Extensión del archivo de imagen
 })
 
 BrandSchema.pre("remove",function (next){
     updateRefs.hasRefs(this.id)
     .then(response => {       
         if (response){
-             console.log("No se puede eliminar el registro ya que tiene referencias externas")
-            return next(new Error(`No se puede eliminar el registro ya que tiene referencias externas`))
+            // throw new Error(`No se puede eliminar el registro ya que tiene referencias externas`)
+            // return console.error("No se puede eliminar el registro ya que tiene referencias externas")
+             next(new Error(`No se puede eliminar el registro ya que tiene referencias externas`))
         }else{
             console.log("No hay referencias. Se puede borrar")
             return next()

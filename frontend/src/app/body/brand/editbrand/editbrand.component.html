@@ -22,7 +22,6 @@
                 </div>
                 <form
                   method="POST"
-                  (ngSubmit)="saveBrand($event.target)"
                   class="link right-space"
                   enctype="multipart/form-data"
                 >
@@ -40,28 +39,25 @@
                       [(ngModel)]="brand.brand"
                     />
                   </div>
-                <div class="custom-file">
-                    <input
-                      type="file"
-                      class="custom-file-input form-control "
-                      name="image"
-                      id="image"
-                      (change)="uploadImage($event.target.files)"
-                    />
-                    <label id="image-label" class="custom-file-label" for="image"
-                      >Imagen</label
-                    >
-                  </div>
+
+                    <app-imgcropper></app-imgcropper>
+
                   <div class="card-footer">
                     <input
                       type="submit"
-                      value="Guardar"
+                      value="Modificar"
                       class="btn btn-success btn-block btn-sm"
+                      mwlConfirmationPopover
+                      [popoverTitle]="popoverTitle"
+                      [popoverMessage]="popoverMessage"
+                      [confirmText]="confirmText"
+                      [cancelText]="cancelText"
+                      (confirm)="saveBrand()"
+                      [appendToBody]="true"
                     />
                   </div>
                 </form>
               </div>
-
           </div>
         </li>
       </ul>

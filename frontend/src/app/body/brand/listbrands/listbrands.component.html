@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="brands; else elseBlock">
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
@@ -36,8 +36,14 @@
                 <div class="">
                   <i
                     class="fa fa-trash  fa-2x"
-                    (click)="this.deleteBrand(brand._id)"
-                  ></i>
+                    mwlConfirmationPopover
+                    [popoverTitle]="popoverTitle"
+                    [popoverMessage]="popoverMessage"
+                    [confirmText]="confirmText"
+                    [cancelText]="cancelText"
+                    (confirm)="this.deleteBrand(brand._id)"
+                    [appendToBody]="true">
+                  </i>
                 </div>
               </td>
             </tr>
@@ -58,3 +64,11 @@
     </div>
   </div>
 </div>
+
+<ng-template #elseBlock>
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

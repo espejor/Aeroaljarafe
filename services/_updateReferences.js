@@ -7,7 +7,7 @@ function incRef(reference){
         {coleccion:reference},
         (err,extRef) => {
             if (err)  
-                console.log(`No se encuentra el registro en la BD: ${err}`)
+                console.err(`No se encuentra el registro en la BD: ${err}`)
             else{
                 if (!extRef){
                     console.log("No existe esa referencia " + reference)

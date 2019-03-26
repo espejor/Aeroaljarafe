@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BrandService } from "../brand.service";
 import { Brand } from "../brand.model";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-listbrands",
@@ -9,7 +10,15 @@ import { Brand } from "../brand.model";
 })
 export class ListbrandsComponent implements OnInit {
   brands: Brand[];
-  constructor(private brandService: BrandService) {}
+
+  popoverTitle = "Borrar una Marca"
+  popoverMessage = "¿Está seguro que quiere eliminar la Marca?"
+
+
+  constructor(
+    private brandService: BrandService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.getBrands();
@@ -22,15 +31,17 @@ export class ListbrandsComponent implements OnInit {
     });
   }
 
-  deleteBrand(id:string) {
-    if (confirm("¿Estás seguro que deseas eliminar el registro?")) {
-      this.brandService.deleteBrand(id).subscribe(data => {
-        console.log(data)
-        this.deleteElementFromBrands(data.brand)
-      }, (err) => {
-        console.log(err);
-      })
-    }
+  deleteBrand(id: string) {
+    this.brandService.deleteBrand(id).subscribe(
+      data => {
+        console.log(data);
+        this.deleteElementFromBrands(data.brand);
+        this.toastr.success(`Se ha eliminado la Marca: ${data.brand.brand}`,"¡OK!")
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 
   private deleteElementFromBrands(brand: Brand) {

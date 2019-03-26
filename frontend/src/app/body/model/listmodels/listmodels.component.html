@@ -3,7 +3,7 @@
       <div class="col-lg-3"></div>
       <div class="col-lg-6">
         <h2>Lista de Modelos de Aeronaves</h2>
-        <div class="table-responsive">
+        <div class="table-responsive" *ngIf="models; else elseBlock ">
           <table class="table">
             <thead>
               <tr>
@@ -39,14 +39,21 @@
                   <div class="">
                     <i
                       class="fa fa-trash  fa-2x"
-                      (click)="this.deleteModel(model._id)"
+                      mwlConfirmationPopover
+                      [popoverTitle]="popoverTitle"
+                      [popoverMessage]="popoverMessage"
+                      [confirmText]="confirmText"
+                      [cancelText]="cancelText"
+                      (confirm)="this.deleteBrand(model._id)"
+                      [appendToBody]="true"
                     ></i>
                   </div>
                 </td>
-              </tr>
+              </tr> 
             </tbody>
           </table>
         </div>
+        <ng-template #elseBlock>No existen Modelos en la BD</ng-template>
         <div>
           <form class="link right-space">
             <input

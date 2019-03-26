@@ -6,6 +6,10 @@ import { ListplanesComponent } from './listplanes/listplanes.component';
 import { EditplaneComponent } from './editplane/editplane.component';
 import { PlaneRoutingModule } from './plane-routing.module';
 import { NewplaneComponent } from './newplane/newplane.component';
+import { ImgcropperModule } from '../imgcropper/imgcropper.module';
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -17,7 +21,11 @@ import { NewplaneComponent } from './newplane/newplane.component';
   imports: [
     CommonModule,
     FormsModule,
-    PlaneRoutingModule
+    PlaneRoutingModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    ConfirmationPopoverModule,
+    ImgcropperModule
   ],
   providers: [
     PlaneService

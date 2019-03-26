@@ -1,0 +1,74 @@
+<div class="container" *ngIf="brands; else elseBlock">
+  <div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+      <h2>Lista de Marcas de Aeronaves</h2>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Marca</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let brand of brands">
+              <td>
+                <a>
+                  <img
+                    src="../../../../assets/images/{{ brand._id }}.{{
+                      brand.extension
+                    }}"
+                    alt="imagen"
+                    class="card-img-top "
+                  />
+                </a>
+              </td>
+              <td>{{ brand.brand }}</td>
+              <td>
+                <div class="d-flex justify-content-end">
+                  <a [routerLink]="['/brand/edit', brand._id]"
+                    ><i class="fa fa-edit  fa-2x"></i
+                  ></a>
+                </div>
+              </td>
+              <td>
+                <div class="">
+                  <i
+                    class="fa fa-trash  fa-2x"
+                    mwlConfirmationPopover
+                    [popoverTitle]="popoverTitle"
+                    [popoverMessage]="popoverMessage"
+                    [confirmText]="confirmText"
+                    [cancelText]="cancelText"
+                    (confirm)="this.deleteFlight(brand._id)"
+                    [appendToBody]="true">
+                  </i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <form class="link right-space">
+          <input
+            type="submit"
+            value="Nuevo"
+            class="btn btn-primary"
+            [routerLink]="['/brands/new']"
+          />
+        </form>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</ng-template>

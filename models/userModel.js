@@ -24,12 +24,12 @@ passwordValidation = {
 // Creamos el Schema
 const UserSchema = new Schema({
     accessData:{
-        email: {type: String, unique:true, lowercase: true,required: true, match:REGEX},
+        email: {type: String, unique:true, lowercase: true,required: [true, 'Un email es obligatorio'], match:REGEX},
         password: {
             type: String, 
             select: false,
             minlength: 8,
-            required: true,
+            required: [true, 'Debe introducir una palabra clave'],
             validate: passwordValidation
         },
         signupDate: {type: Date, default: Date.now()},

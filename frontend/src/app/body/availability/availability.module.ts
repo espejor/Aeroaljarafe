@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 import { AvailabilityRoutingModule } from "./availability-routing.module";
-import { ListavailabilitysComponent } from "./listavailabilitys/listavailabilitys.component";
+import { ListavailabilitiesComponent } from "./listavailabilities/listavailabilities.component";
 import { EditavailabilityComponent } from "./editavailability/editavailability.component";
 import { NewavailabilityComponent } from "./newavailability/newavailability.component";
 import { AvailabilityService } from './availability.service';
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    ListavailabilitysComponent,
+    ListavailabilitiesComponent,
     EditavailabilityComponent,
     NewavailabilityComponent
   ],

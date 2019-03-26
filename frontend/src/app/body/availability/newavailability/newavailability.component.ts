@@ -36,7 +36,7 @@ export class NewavailabilityComponent implements OnInit {
     .subscribe(res => {
       console.log(res)
       
-      this.newRoute.navigate(['availabilitys'])
+      this.newRoute.navigate(['availabilities'])
     }, (err) => {
       console.log(err);
     })

@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <h2>Lista de Disponibilidades de Aeronaves</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Disponibilidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let availability of availabilities">
+                <td>
+                  <a>
+                    <img
+                      src="../../../../assets/images/{{ availability._id }}.{{
+                        availability.extension
+                      }}"
+                      alt="imagen"
+                      class="icon"
+                    />
+                  </a>
+                </td>
+                <td>{{ availability.availability }}</td>
+                <td>
+                  <div class="d-flex justify-content-end">
+                    <a [routerLink]="['/availability/edit', availability._id]"
+                      ><i class="fa fa-edit  fa-2x"></i
+                    ></a>
+                  </div>
+                </td>
+                <td>
+                  <div class="">
+                    <i
+                      class="fa fa-trash  fa-2x"
+                      (click)="this.deleteAvailability(availability._id)"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <form class="link right-space">
+            <input
+              type="submit"
+              value="Nuevo"
+              class="btn btn-primary"
+              [routerLink]="['/availabilities/new']"
+            />
+          </form>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+    </div>
+  </div>
+  

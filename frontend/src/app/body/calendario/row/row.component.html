@@ -1,0 +1,17 @@
+<div class="rowTime " *ngFor="let row of rows">
+  <div class="row border-top border-bottom ">
+    <div class="col-2 cellHour  ">
+      <h6 class="font-weight-bold text-center mr-3">{{ row.hour }}</h6>
+    </div>
+    <div class="col">
+      <div class="row  rowSegment">
+        <div
+          *ngFor="let plane of planes"
+          class="col border-right border-left segmentClass"
+        >
+          <app-segment [row]="row" [plane]="plane"> </app-segment>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

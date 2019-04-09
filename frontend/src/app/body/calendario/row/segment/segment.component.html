@@ -1,0 +1,10 @@
+<div
+  id="{{ plane.id }}_{{ row.hour }}"
+  class="segmentClass"
+  [attr.data-hour]="row.hour"
+  [attr.data-plane]="plane.id"
+  [attr.data-selected]="selected"
+>
+  <app-button [row]="row" [plane]="plane" [created]="created" [height]="height"></app-button>
+  <app-resizing-area [created]="created" [row]="row" [plane]="plane"> </app-resizing-area>
+</div>

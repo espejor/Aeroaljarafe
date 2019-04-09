@@ -1,0 +1,34 @@
+.buttonTask{
+    width: 100%;
+    position: absolute;
+    left: 0;
+    background: cadetblue;
+    border-top: 1px;
+    border-bottom: 0px;
+    border-left: 1px;
+    border-right: 1px;
+    border-style: solid;
+    border-radius: 15px;
+}
+.resizingArea{
+    z-index: 10;
+    background: transparent;
+    cursor: s-resize;
+}
+.txt{
+    text-align: center;
+    color: white;
+}
+
+.fa-edit{
+    color: ghostwhite
+}
+.fa-trash{
+    color: rgb(255, 0, 0);
+    padding-left: 30%;
+    padding-right: 20%;
+}
+
+.justify-content-end{
+    padding-right: 10px;
+}

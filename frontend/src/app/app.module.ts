@@ -12,6 +12,7 @@ import { ToastrModule } from "ngx-toastr";
 import { HttpErrorInterceptor } from "./http-error/http-error.interceptor";
 import { ConfirmationPopoverModule } from "angular-confirmation-popover";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 // import { CalendarModule, DateAdapter } from "angular-calendar";
 // import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
 

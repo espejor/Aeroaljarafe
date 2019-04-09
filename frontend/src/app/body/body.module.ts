@@ -11,6 +11,8 @@ import { StatusModule } from './status/status.module';
 import { ImgcropperModule } from './imgcropper/imgcropper.module';
 import { FlightModule } from './flight/flight.module';
 import { CustomCalendarModule } from './customCalendar/customCalendar.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
+import { CalendarioModule } from './calendario/calendario.module';
 
 @NgModule({
   declarations: [
@@ -27,11 +29,15 @@ import { CustomCalendarModule } from './customCalendar/customCalendar.module';
     StatusModule,
     ImgcropperModule,
     FlightModule,
-    CustomCalendarModule
+    CustomCalendarModule,
+    SchedulerModule,
+    CalendarioModule
   ],
   exports:[
     ImgcropperModule,
-    CustomCalendarModule
+    CustomCalendarModule,
+    SchedulerModule,
+    CalendarioModule
   ]
 })
 export class BodyModule { }

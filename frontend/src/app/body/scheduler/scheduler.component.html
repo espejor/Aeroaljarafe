@@ -1,3 +1,54 @@
-<p>
-  scheduler works!
-</p>
+<div class="container" contenteditable="false" draggable="false">
+  <ng-container *ngTemplateOutlet="cellHeader"> Cargando...</ng-container>
+  <ng-container *ngTemplateOutlet="cellSelectable">Cargando...</ng-container>
+</div>
+
+<ng-template #cellHeader>
+  <div class="schedulerHeader">
+    <div class="row">
+      <div class="col-2 rowSegment">Hora</div>
+      <div class="col ">
+        <div class="row">
+          <div class="col imageContainer" *ngFor="let plane of planes">
+            {{ plane.plate }}
+            <img
+              class="image rounded-circle"
+              src="../../../../assets/images/{{ plane._id }}.{{
+                plane.extension
+              }}"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #cellSelectable let-hour="row.label">
+  <div 
+    *ngFor="let row of rowOfSegments" 
+    class="row rowSegment border-top"
+    >
+    <div class="col-2 cellHour  ">
+      <h6 class="font-weight-bold text-center mr-3">{{ row._segmentHour._label }}</h6>
+    </div>
+    <div class="col">
+      <div class="row  rowSegment">
+        <div
+          *ngFor="let plane of planes"
+          id="{{ plane._id }}_{{ row._segmentHour._label }}"
+          class="col border segmentClass"
+          [attr.data-hour]="row._segmentHour._label"
+          [attr.data-plane]="plane._id"
+          (mousedown)="mouseDownEvent($event.target)"
+          (mouseenter)="enlargingButtonFlight($event)"
+          (mouseup)="endCreatingButtonFlight($event.target)"
+        ></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #buttonFlightTemplate>
+  Esto es una plantilla de boton
+</ng-template>

@@ -1,0 +1,8 @@
+.resizingArea{
+    height: 16px;
+    /* background-color: #dc3545; */
+    bottom: 16px;
+    position: relative;
+    cursor: row-resize;
+    z-index: 20;
+}

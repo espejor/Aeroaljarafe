@@ -6,6 +6,7 @@ import { SchedulerComponent } from './scheduler.component';
   declarations: [SchedulerComponent],
   imports: [
     CommonModule
-  ]
+  ],
+  exports: [SchedulerComponent]
 })
 export class SchedulerModule { }

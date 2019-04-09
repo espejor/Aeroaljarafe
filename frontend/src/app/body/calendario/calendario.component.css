@@ -1,0 +1,78 @@
+.container {
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
+  height: 96rem;
+}
+
+.board {
+  border-right: 1px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-color: gray;
+  border-style: solid;
+}
+
+.cell {
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 1px;
+  border-left: 0px;
+  border-color: gray;
+  border-style: solid;
+  height: 2rem;
+}
+
+.rowSegment {
+  height: 2rem;
+  /* z-index: -1; */
+}
+
+.cellHour {
+  position: relative;
+  bottom: 0.7rem;
+  margin-bottom: 0px;
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.cellHour h6 {
+  background: white;
+}
+.segmentClass {
+  padding-left: 0px;
+  padding-right: 0px;
+  height: 2rem;
+}
+
+.flightButton {
+  z-index: 10;
+  width: 100%;
+  background-color: l;
+  /* position: relative; */
+}
+
+.image {
+  width: 3rem;
+  height: 3rem;
+}
+
+.imageContainer {
+  text-align: center;
+}
+
+.resizingArea {
+  /* position: relative; */
+  background: red;
+  height: 16px;
+  bottom: 16px;
+  left: 0px;
+  right: 0px;
+  /* height: 50%; */
+  /* max-height: -16px; */
+  cursor: ns-resize;
+  z-index: 20;
+}

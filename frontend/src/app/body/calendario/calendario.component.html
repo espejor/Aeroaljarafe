@@ -1,0 +1,28 @@
+<div
+  class="container calendar row"
+  [attr.height]="heigth"
+  (mouseup)="mouseUpEvent($event)"
+  (mousedown)="mouseDownEvent($event)"
+>
+  <div class="board col" *ngFor="let plane of planeList">
+    <div
+      class="cell"
+      *ngFor="let hour of hourList"
+      [attr.hour]="hour"
+      [attr.plane]="plane.id"
+    >
+      {{ hour }}
+      <!-- <app-row> </app-row> -->
+      <div *ngFor="let task of tasksList">
+        <app-task
+          *ngIf="plane.id == task.plane"
+          id="{{ task.id }}"
+          [hour]="task.hour"
+          [plane]="plane.id"
+          [height]="task.height"
+          [task]="task"
+        ></app-task>
+      </div>
+    </div>
+  </div>
+</div>

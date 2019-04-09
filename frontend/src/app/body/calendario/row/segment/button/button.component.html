@@ -1,0 +1,10 @@
+<button
+  *ngIf="created"
+  class="buttonFlight"
+  id="{{ row.hour }}_{{ plane.id }}"
+  [attr.data-class]="button"
+  (mouseenter)="enterButtonFlight($event.target)"
+  [ngStyle]="{'height.rem': height}"
+>
+  {{ row.hour }}_{{ plane.id }}
+</button>

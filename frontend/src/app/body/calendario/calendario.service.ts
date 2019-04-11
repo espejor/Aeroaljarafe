@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { HtmlButton } from "./row/segment/button/htmlButton";
 import { SegmentComponent } from "./row/segment/segment.component";
-import { ButtonComponent } from "./row/segment/button/button.component";
-import { TaskComponent } from './task/task.component';
+import { TaskComponent } from "./task/task.component";
 
 @Injectable({
   providedIn: "root"
@@ -11,6 +9,9 @@ import { TaskComponent } from './task/task.component';
 export class CalendarioService {
   private _resizing: boolean = false;
   private _creating: boolean = false;
+  private _moving: boolean = false;
+  private _tasksList = new Map<string, TaskComponent>();
+  private tasksList$ = new Subject<Map<string, TaskComponent>>();
 
   listOfSegmentsWithButton: SegmentComponent[] = [];
   private _segmentResizing: SegmentComponent;
@@ -20,11 +21,72 @@ export class CalendarioService {
   private _enlarging: boolean;
   private _shortening: boolean;
   private _enlargingBlocked: boolean = false;
-  private _taskResizing: TaskComponent;
+  private _taskResizing: TaskComponent ;
+  private _taskMoving: TaskComponent;
   HEIGHT_CALENDAR: any;
 
   constructor() {}
 
+  // public get tasksList() {
+  //   return this._tasksList;
+  // }
+  // public set tasksList(value) {
+  //   this._tasksList = value;
+  // }
+
+  public updateTask(oldTask:TaskComponent,newTask:TaskComponent){
+    this._tasksList.delete(oldTask.id);
+    this._tasksList.set(newTask.id, newTask);
+    this.tasksList$.next(this._tasksList);
+  }
+
+  public addTask(task: TaskComponent) {
+    this._tasksList.set(task.id, task);
+    this.tasksList$.next(this._tasksList);
+  }
+
+  public removeTask(task: TaskComponent) {
+    this._tasksList.delete(task.id);
+    this.tasksList$.next(this._tasksList);
+  }
+
+  public getTask(key: string): TaskComponent {
+    return this._tasksList.get(key);
+  }
+
+  public getTasksList$(): Observable<Map<string, TaskComponent>> {
+    return this.tasksList$.asObservable();
+  }
+
+  public isOcupied(_task: TaskComponent): boolean {
+    let init = _task.top;
+    let end = _task.top + _task.height;
+    let plane = _task.plane;
+    let ocupied = false;
+    this._tasksList.forEach((task, key, list) => {
+      if (task.id != _task.getTask().id && !ocupied && plane == task.plane) {
+        if (init >= task.top) {
+          if (init < task.top + task.height) 
+          ocupied = true; // Empieza en medio de otra tarea
+        } //init < task.top
+        else if (end > task.top) ocupied = true;
+      }
+    });
+    return ocupied;
+  }
+
+  public get moving(): boolean {
+    return this._moving;
+  }
+  public set moving(value: boolean) {
+    this._moving = value;
+  }
+  public get taskMoving(): TaskComponent {
+    return this._taskMoving;
+  }
+  public set taskMoving(value: TaskComponent) {
+    this._taskMoving = value;
+  }
   public get enlargingBlocked(): boolean {
     return this._enlargingBlocked;
   }

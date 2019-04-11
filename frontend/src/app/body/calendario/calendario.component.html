@@ -13,16 +13,17 @@
     >
       {{ hour }}
       <!-- <app-row> </app-row> -->
-      <div *ngFor="let task of tasksList">
-        <app-task
-          *ngIf="plane.id == task.plane"
-          id="{{ task.id }}"
-          [hour]="task.hour"
-          [plane]="plane.id"
-          [height]="task.height"
-          [task]="task"
-        ></app-task>
-      </div>
+    </div>
+
+    <div *ngFor="let task of (tasksList | keyvalue)">
+      <app-task
+        *ngIf="plane.id == task.value.plane"
+        [id]="task.value.id"
+        [hour]="task.value.hour"
+        [plane]="plane.id"
+        [height]="task.value.height"
+        [task]="task.value"
+      ></app-task>
     </div>
   </div>
 </div>

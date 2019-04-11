@@ -12,7 +12,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ConfirmationPopoverModule } from "angular-confirmation-popover";
 import { from } from "rxjs";
 import { ImgcropperModule } from '../imgcropper/imgcropper.module';
-import { CustomCalendarModule } from '../customCalendar/customCalendar.module';
 import { SchedulerModule } from '../scheduler/scheduler.module';
 import { CalendarioModule } from '../calendario/calendario.module';
 
@@ -32,7 +31,6 @@ import { CalendarioModule } from '../calendario/calendario.module';
     ConfirmationPopoverModule,
     ImgcropperModule,
     BrowserAnimationsModule,
-    CustomCalendarModule,
     SchedulerModule,
     CalendarioModule
   

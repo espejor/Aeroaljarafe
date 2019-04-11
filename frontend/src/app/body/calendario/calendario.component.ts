@@ -3,13 +3,11 @@ import {
   OnInit,
   AfterViewInit,
   ViewChildren,
-  QueryList,
-  Renderer2
+  QueryList
 } from "@angular/core";
-import { ButtonComponent } from "./row/segment/button/button.component";
 import { CalendarioService } from "./calendario.service";
 import { TaskComponent } from "./task/task.component";
-import { Tasks } from "./tasksList";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-calendario",
@@ -18,30 +16,42 @@ import { Tasks } from "./tasksList";
 })
 export class CalendarioComponent implements OnInit, AfterViewInit {
   @ViewChildren(TaskComponent) tasks: QueryList<TaskComponent>;
-  tasksList: TaskComponent[] = [];
+
   planeList: any[] = [{ id: "aaaaa" }, { id: "bbbbb" }];
   hourList: string[] = [];
   taskResizing: TaskComponent;
 
-  constructor(
-    private calendarioService: CalendarioService,
-    private renderer: Renderer2
-  ) {
-    this.tasksList = [];
+  tasksList$: Observable<Map<string, TaskComponent>>;
+  tasksList: Map<string, TaskComponent> = new Map<string, TaskComponent>();
+
+  ngOnInit() {
+    this.tasksList$ = this.calendarioService.getTasksList$();
+    this.tasksList$.subscribe(tasksList => {
+      this.tasksList = tasksList;
+    });
+  }
+
+  constructor(private calendarioService: CalendarioService) {
+    this.createHourList();
+    this.createDummyTasks();
+  }
+
+  createDummyTasks(): any {
+    // Creación de dos tareas
     let task1 = new TaskComponent(this.calendarioService);
     task1.hour = "10:30";
     task1.plane = "aaaaa";
     task1.height = 4;
     task1.top = 42;
-    this.tasksList.push(task1);
+    this.calendarioService.addTask(task1);
     let task2 = new TaskComponent(this.calendarioService);
     task2.hour = "07:00";
     task2.plane = "bbbbb";
     task2.height = 6;
     task2.top = 28;
-    this.tasksList.push(task2);
-
-    this.createHourList();
+    this.calendarioService.addTask(task2);
+    this.tasksList.set(task1.id, task1);
+    this.tasksList.set(task2.id, task2);
   }
 
   ngAfterViewInit(): void {
@@ -52,16 +62,30 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {}
-
   mouseDownEvent(event) {
-    this.calendarioService.HEIGHT_CALENDAR = event.target.clientHeight;
-    if (!this.calendarioService.resizing) {
-      this.calendarioService.creating = true;
-      this.calendarioService.taskResizing = this.createtask(event);
+    this.calendarioService.HEIGHT_CALENDAR = event.currentTarget.clientHeight;
+    if (event.target.classList.contains("cell")) {
+      if (!this.calendarioService.resizing) {
+        this.calendarioService.creating = true;
+        this.calendarioService.taskResizing = this.createtask(event);
+      }
     }
+    // if (this.clickInButton(event)) {
+    //   this.calendarioService.moving = true;
+    //   this.calendarioService.taskMoving = this.locateTask(event.target);
+    //   this.calendarioService.taskMoving.cursor = "move"
+    // }
   }
-
+  // clickInButton(event: any): any {
+  //   return (
+  //     event.target.classList.contains("buttonTask") ||
+  //     event.target.classList.contains("hour") ||
+  //     event.target.classList.contains("tVuelo")
+  //   );
+  // }
+  locateTask(target: any): TaskComponent {
+    return this.calendarioService.getTask(target.id).task;
+  }
   createHourList(): any {
     for (let i = 0; i < 48; i++) {
       let h = Math.trunc(i / 2);
@@ -79,25 +103,22 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
     let task: TaskComponent = new TaskComponent(this.calendarioService);
     task.hour = event.target.attributes.hour.value;
     task.plane = event.target.attributes.plane.value;
-    task.height = 2;
-    task.top = this.calculateTop(task.hour);
-    this.tasksList.push(task);
+    this.calendarioService.addTask(task);
     return task;
   }
 
-  calculateTop(hour: string): number {
-    let hourArray = hour.split(":");
-    let h = parseInt(hourArray[0]);
-    let m = parseInt(hourArray[1]);
-    return 4 * h + (2 * m) / 30;
+  mouseUpEvent(event) {
+    this.calendarioService.creating = false;
+    this.calendarioService.resizing = false;
+    if (this.calendarioService.moving) {
+      this.calendarioService.taskMoving.mouseUpEvent(event);
+      // this.calendarioService.moving = false;
+      // this.calendarioService.taskMoving.cursor = "auto";
+      // this.calendarioService.taskMoving.dragging = false;
+    }
   }
 
-  mouseUpEvent(event) {
-    if (this.calendarioService.creating || this.calendarioService.resizing) {
-      this.calendarioService.creating = false;
-      this.calendarioService.resizing = false;
-
-      console.log("Botón Creado");
-    }
+  getKeys(map) {
+    return Array.from(map.keys());
   }
 }

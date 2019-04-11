@@ -2,11 +2,13 @@
   <div
     id="{{ id }}"
     class="buttonTask d-flex flex-column "
-    (mouseenter)="mouseEnterEvent($event)"
+    (mousedown) = "mouseDownEvent($event)"
+    (mouseup) = "mouseUpEvent($event)"
+    (mousemove) = "mouseMoveEvent($event)"
       title="{{ id }}"
-    [ngStyle]="{ 'height.rem': height, 'top.rem': top }"
+    [ngStyle]="buttonStyle"
   >
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end actions">
       <div>
         <a> <i class="fa fa-edit  fa-1x"></i></a>
       </div>
@@ -15,14 +17,15 @@
       </div>
     </div>
     <div>
-      <div class="hour txt" *ngIf="height > 2">H. Inicio: {{ hour }}</div>
-      <div class="tVuelo txt" *ngIf="height > 2">
+      <div class="hour txt" id="{{ id }}" *ngIf="height > 2">H. Inicio: {{ hour }}</div>
+      <div class="tVuelo txt" id="{{ id }}" *ngIf="height > 2">
         T. Vuelo: {{ tVuelo }} min.
       </div>
     </div>
     <div
+    id="{{ id }}"
       class="resizingArea mt-auto "
-      [ngStyle]="{ 'height.rem': heightRsz }"
+      [ngStyle]="{ 'height.rem': heightRsz}"
       (mouseleave)="mouseLeaveEvent($event)"
       (mousedown)="mouseDownEvent($event)"
     ></div>

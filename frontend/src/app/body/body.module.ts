@@ -10,7 +10,6 @@ import { AvailabilityModule } from './availability/availability.module';
 import { StatusModule } from './status/status.module';
 import { ImgcropperModule } from './imgcropper/imgcropper.module';
 import { FlightModule } from './flight/flight.module';
-import { CustomCalendarModule } from './customCalendar/customCalendar.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { CalendarioModule } from './calendario/calendario.module';
 
@@ -29,13 +28,11 @@ import { CalendarioModule } from './calendario/calendario.module';
     StatusModule,
     ImgcropperModule,
     FlightModule,
-    CustomCalendarModule,
     SchedulerModule,
     CalendarioModule
   ],
   exports:[
     ImgcropperModule,
-    CustomCalendarModule,
     SchedulerModule,
     CalendarioModule
   ]

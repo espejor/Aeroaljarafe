@@ -13,10 +13,34 @@ export class TaskComponent implements OnInit {
   private _heightRsz: number;
   private _topRsz: number;
   private _tVuelo: number;
+  private _cursor: string;
+  private _top: number;
+  private _dragging: boolean;
+  previousTop: number;
+  private buttonStyle = {
+    "height.rem": this.height,
+    "top.rem": this.top,
+    cursor: this.cursor,
+    "z-index": 10
+  };
 
-  @Input() top: number;
   @Input() id: string = `${this.plane}_${this.hour}`;
   @Input() task: TaskComponent;
+
+  @Input() public get top(): number {
+    return this._top;
+  }
+  public set top(value: number) {
+    this._top = value;
+    this._hour = this.calculateHour(value);
+    if (this.plane != undefined) this.id = `${this.plane}_${this.hour}`;
+    this.buttonStyle["top.rem"] = this.top;
+  }
+
+  public getTask(): TaskComponent {
+    return this.task;
+  }
+
   @Input() public get height(): number {
     return this._height;
   }
@@ -25,6 +49,7 @@ export class TaskComponent implements OnInit {
     this._topRsz = -value + 2 * this.heightRsz;
     this._height = value;
     this.tVuelo = this.calculateTVuelo();
+    this.buttonStyle["height.rem"] = value;
   }
   @Input() public get hour(): string {
     return this._hour;
@@ -32,13 +57,51 @@ export class TaskComponent implements OnInit {
   public set hour(value: string) {
     this._hour = value;
     if (this.plane != undefined) this.id = `${this.plane}_${this.hour}`;
+    this._top = this.calculateTop(this.hour);
   }
   @Input() public get plane(): string {
     return this._plane;
   }
+
   public set plane(value: string) {
     this._plane = value;
     if (this.hour != undefined) this.id = `${this.plane}_${this.hour}`;
+  }
+
+  // ----------- Constructor ---------------
+  constructor(private calendarioService: CalendarioService) {
+    this.height = 2;
+  }
+
+  ngOnInit() {
+    this.id = `${this.plane}_${this.hour}`;
+    console.log(this.task);
+    this.top = this.task.top;
+    this.cursor = "auto";
+    this.buttonStyle = {
+      "height.rem": this.height,
+      "top.rem": this.top,
+      cursor: this.cursor,
+      "z-index": 10
+    };
+  }
+
+  // ------------ Setter y Getter -------------
+
+  public get dragging(): boolean {
+    return this._dragging;
+  }
+  public set dragging(value: boolean) {
+    if (value) this.buttonStyle["z-index"] = 100;
+    else this.buttonStyle["z-index"] = 10;
+    this._dragging = value;
+  }
+  public get cursor(): string {
+    return this._cursor;
+  }
+  public set cursor(value: string) {
+    this._cursor = value;
+    this.buttonStyle["cursor"] = value;
   }
 
   public get heightRsz(): number {
@@ -58,31 +121,76 @@ export class TaskComponent implements OnInit {
   private calculateTVuelo(): number {
     return this.height * 15;
   }
-  constructor(private calendarioService: CalendarioService) {}
 
-  ngOnInit() {
-    this.id = `${this.plane}_${this.hour}`;
-    console.log(this.task);
-    this.top = this.task.top;
+  calculateTop(hour: string): number {
+    let hourArray = hour.split(":");
+    let h = parseInt(hourArray[0]);
+    let m = parseInt(hourArray[1]);
+    return 4 * h + (2 * m) / 30;
   }
 
+  calculateHour(value: number): string {
+    let min = value * 15;
+    let h = Math.trunc(min / 60);
+    let m = Math.trunc(min % 60);
+    let hStr: string = h.toString();
+    if (h < 10) hStr = `0${hStr}`;
+    let mStr: string = m.toString();
+    if (m < 10) mStr = `0${mStr}`;
+
+    return `${hStr}:${mStr}`;
+  }
+  // ------------- Handlers de ratón
   mouseDownEvent(event) {
-    //this.calendarioService.HEIGHT_CALENDAR = event.target.clientHeight;
-    this.calendarioService.resizing = true;
-    this.calendarioService.taskResizing = this.task;
+    if (event.target.classList.contains("resizingArea")) {
+      this.calendarioService.resizing = true;
+      if (this.calendarioService.taskResizing == undefined)
+        this.calendarioService.taskResizing = new TaskComponent(
+          this.calendarioService
+        );
+      this.calendarioService.taskResizing = this.task;
+    }
+    if (this.clickInButton(event)) {
+      this.calendarioService.moving = true;
+      this.dragging = true;
+      this.cursor = "move";
+      this.calendarioService.taskMoving = this;
+      this.previousTop = this.top;
+    }
   }
 
-  mouseEnterEvent(event) {
-    // if (this.calendarioService.resizing || this.calendarioService.creating) {
-    //   if (
-    //     event.movementY > 0 &&
-    //     event.target.classList.contains("buttonTask")
-    //   ) {
-    //     this.calendarioService.resizing = false;
-    //     this.calendarioService.creating = false;
-    //   }
-    // }
+  private clickInButton(event: any): any {
+    return (
+      event.target.classList.contains("buttonTask") ||
+      event.target.classList.contains("hour") ||
+      event.target.classList.contains("tVuelo") ||
+      event.target.classList.contains("actions")
+    );
   }
+
+  mouseMoveEvent(event) {
+    if (this.calendarioService.moving && this.dragging) {
+      let shiftUnit = this.calendarioService.HEIGHT_CALENDAR / 48;
+      let shiftREM = (event.movementY * 2) / shiftUnit;
+      this.top += shiftREM;
+      this.buttonStyle.cursor = "move";
+    }
+  }
+
+  mouseUpEvent(event) {
+    if (this.calendarioService.moving) {
+      let topTrunc = Math.trunc(this.top);
+      this.top = topTrunc % 2 != 0 ? Math.floor(topTrunc / 2) * 2 : topTrunc;
+      if (!this.calendarioService.isOcupied(this)) {
+        this.calendarioService.updateTask(this.task, this);
+      } else this.top = this.previousTop;
+
+      this.dragging = false;
+      this.calendarioService.moving = false;
+      this.cursor = "auto";
+    }
+  }
+
   mouseLeaveEvent(event) {
     if (this.calendarioService.resizing || this.calendarioService.creating) {
       if (event.movementY > 0) {

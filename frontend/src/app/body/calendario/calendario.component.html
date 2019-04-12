@@ -4,17 +4,38 @@
   (mouseup)="mouseUpEvent($event)"
   (mousedown)="mouseDownEvent($event)"
 >
-  <div class="board col" *ngFor="let plane of planeList">
-    <div
-      class="cell"
-      *ngFor="let hour of hourList"
-      [attr.hour]="hour"
-      [attr.plane]="plane.id"
+  <div class="col-2"></div>
+  <div class="col">
+    <div class=" day" [attr.day]="day" 
+    (click)="clickEvent($event)"
+    *ngIf="!showDatePicker"
     >
-      {{ hour }}
-      <!-- <app-row> </app-row> -->
+      <h4>{{ day | date: "dd-MM-yyyy" }}</h4>
     </div>
-
+    <div class="input-group flex-nowrap getDay"
+    *ngIf="showDatePicker"
+    >
+      <input
+        type="date"
+        class="form-control"
+        aria-describedby="addon-wrapping"
+        (change)="showDatePicker = false;"
+        [(ngModel)]="day"
+      />
+    </div>
+  </div>
+  <div class="w-100"></div>
+  <div class="col-2"></div>
+  <div class="col planes" *ngFor="let plane of planeList">
+    <h5>{{ plane.id }}</h5>
+  </div>
+  <div class="w-100"></div>
+  <div class="boardHour board col-2">
+    <div class="cellHour cell" *ngFor="let hour of hourList" [attr.hour]="hour">
+      <h6 class="">{{ hour }}</h6>
+    </div>
+  </div>
+  <div class="board col" *ngFor="let plane of planeList">
     <div *ngFor="let task of (tasksList | keyvalue)">
       <app-task
         *ngIf="plane.id == task.value.plane"
@@ -22,8 +43,20 @@
         [hour]="task.value.hour"
         [plane]="plane.id"
         [height]="task.value.height"
-        [task]="task.value"
+        [top]="task.value.top"
+        [day]="day"
+        [user] = "user"
       ></app-task>
     </div>
+    <div
+      class="cell"
+      *ngFor="let hour of hourList"
+      [attr.hour]="hour"
+      [attr.plane]="plane.id"
+    ></div>
   </div>
 </div>
+
+<ng-template #showFlightTemplate>
+  FlightTemplate
+</ng-template>

@@ -4,10 +4,12 @@ import { CalendarioComponent } from "./calendario.component";
 import { RowComponent } from "./row/row.component";
 import { SegmentComponent } from "./row/segment/segment.component";
 import { ButtonComponent } from "./row/segment/button/button.component";
-import { ResizingAreaComponent } from './row/segment/resizing-area/resizing-area.component';
-import { CalendarioService } from './calendario.service';
-import { TaskComponent } from './task/task.component';
-import { TasksComponent } from './tasks/tasks.component';
+import { ResizingAreaComponent } from "./row/segment/resizing-area/resizing-area.component";
+import { CalendarioService } from "./calendario.service";
+import { TaskComponent } from "./task/task.component";
+import { TasksComponent } from "./tasks/tasks.component";
+import { FormsModule } from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,7 @@ import { TasksComponent } from './tasks/tasks.component';
     TaskComponent,
     TasksComponent
   ],
-  imports: [CommonModule],
+  imports: [NgbModule.forRoot(),FormsModule, CommonModule,],
   exports: [
     CalendarioComponent,
     RowComponent,
@@ -27,8 +29,7 @@ import { TasksComponent } from './tasks/tasks.component';
     ButtonComponent,
     ResizingAreaComponent
   ],
-  providers: [
-    CalendarioService
-  ]
+  providers: [CalendarioService],
+  entryComponents: [TaskComponent]
 })
 export class CalendarioModule {}

@@ -3,11 +3,17 @@ import {
   OnInit,
   AfterViewInit,
   ViewChildren,
-  QueryList
+  QueryList,
+  Type,
+  ViewChild,
+  ViewContainerRef,
+  ComponentRef,
+  ComponentFactoryResolver
 } from "@angular/core";
 import { CalendarioService } from "./calendario.service";
 import { TaskComponent } from "./task/task.component";
 import { Observable } from "rxjs";
+import { User } from "src/app/user/user.model";
 
 @Component({
   selector: "app-calendario",
@@ -16,35 +22,52 @@ import { Observable } from "rxjs";
 })
 export class CalendarioComponent implements OnInit, AfterViewInit {
   @ViewChildren(TaskComponent) tasks: QueryList<TaskComponent>;
+  // @ViewChild("tareas", { read: ViewContainerRef }) tareas: ViewContainerRef;
+  private componentRef: ComponentRef<TaskComponent>;
 
   planeList: any[] = [{ id: "aaaaa" }, { id: "bbbbb" }];
+  day: Date = new Date();
   hourList: string[] = [];
-  taskResizing: TaskComponent;
+  // taskResizing: TaskComponent;
+  user: User;
 
   tasksList$: Observable<Map<string, TaskComponent>>;
-  tasksList: Map<string, TaskComponent> = new Map<string, TaskComponent>();
+  tasksList: Map<string, TaskComponent>// = new Map<string, TaskComponent>();
+  showDatePicker: boolean = false;
 
   ngOnInit() {
+    this.createHourList();
     this.tasksList$ = this.calendarioService.getTasksList$();
     this.tasksList$.subscribe(tasksList => {
       this.tasksList = tasksList;
     });
   }
 
-  constructor(private calendarioService: CalendarioService) {
-    this.createHourList();
-    this.createDummyTasks();
+  constructor(
+    private viewContainerRef:ViewContainerRef,
+    private calendarioService: CalendarioService,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {
+  }
+
+  createTaskComponent(ngItem: Type<TaskComponent>): TaskComponent {
+    this.viewContainerRef.clear();
+    let factory = this.componentFactoryResolver.resolveComponentFactory(ngItem)
+    this.componentRef = this.viewContainerRef.createComponent(factory);
+    let newTask: TaskComponent = this.componentRef.instance;
+    this.componentRef.destroy()
+    return newTask
   }
 
   createDummyTasks(): any {
     // Creación de dos tareas
-    let task1 = new TaskComponent(this.calendarioService);
+    let task1 = this.createTaskComponent(TaskComponent);
     task1.hour = "10:30";
     task1.plane = "aaaaa";
     task1.height = 4;
     task1.top = 42;
     this.calendarioService.addTask(task1);
-    let task2 = new TaskComponent(this.calendarioService);
+    let task2 = this.createTaskComponent(TaskComponent);
     task2.hour = "07:00";
     task2.plane = "bbbbb";
     task2.height = 6;
@@ -60,6 +83,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
       //   console.log(`${task.hour}_${task.plane}`)
       // );
     });
+    // this.createDummyTasks();
   }
 
   mouseDownEvent(event) {
@@ -70,22 +94,8 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
         this.calendarioService.taskResizing = this.createtask(event);
       }
     }
-    // if (this.clickInButton(event)) {
-    //   this.calendarioService.moving = true;
-    //   this.calendarioService.taskMoving = this.locateTask(event.target);
-    //   this.calendarioService.taskMoving.cursor = "move"
-    // }
   }
-  // clickInButton(event: any): any {
-  //   return (
-  //     event.target.classList.contains("buttonTask") ||
-  //     event.target.classList.contains("hour") ||
-  //     event.target.classList.contains("tVuelo")
-  //   );
-  // }
-  locateTask(target: any): TaskComponent {
-    return this.calendarioService.getTask(target.id).task;
-  }
+
   createHourList(): any {
     for (let i = 0; i < 48; i++) {
       let h = Math.trunc(i / 2);
@@ -100,7 +110,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
   }
 
   createtask(event: any): TaskComponent {
-    let task: TaskComponent = new TaskComponent(this.calendarioService);
+    let task: TaskComponent = this.createTaskComponent(TaskComponent);
     task.hour = event.target.attributes.hour.value;
     task.plane = event.target.attributes.plane.value;
     this.calendarioService.addTask(task);
@@ -108,17 +118,15 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
   }
 
   mouseUpEvent(event) {
-    this.calendarioService.creating = false;
-    this.calendarioService.resizing = false;
     if (this.calendarioService.moving) {
       this.calendarioService.taskMoving.mouseUpEvent(event);
-      // this.calendarioService.moving = false;
-      // this.calendarioService.taskMoving.cursor = "auto";
-      // this.calendarioService.taskMoving.dragging = false;
+    }
+    if (this.calendarioService.resizing || this.calendarioService.creating) {
+      this.calendarioService.taskResizing.mouseUpEvent(event);
     }
   }
 
-  getKeys(map) {
-    return Array.from(map.keys());
+  clickEvent(event) {
+    this.showDatePicker = true;
   }
 }

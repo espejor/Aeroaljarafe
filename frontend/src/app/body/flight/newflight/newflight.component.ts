@@ -3,6 +3,7 @@ import { FlightService } from '../flight.service';
 import { Flight } from '../flight.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 
 @Component({

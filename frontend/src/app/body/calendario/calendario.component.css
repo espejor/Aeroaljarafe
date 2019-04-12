@@ -13,6 +13,8 @@
   border-left: 0px;
   border-color: gray;
   border-style: solid;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .cell {
@@ -24,7 +26,15 @@
   border-style: solid;
   height: 2rem;
 }
-
+.day{
+    text-align: center;
+    border: 1px;
+    border-style: solid;
+    border-radius: 10px;
+}
+.planes{
+    text-align: center;
+}
 .rowSegment {
   height: 2rem;
   /* z-index: -1; */
@@ -34,6 +44,7 @@
   position: relative;
   bottom: 0.7rem;
   margin-bottom: 0px;
+  border-bottom: 0px;
   padding-top: 0px;
   padding-left: 0px;
   padding-right: 0px;

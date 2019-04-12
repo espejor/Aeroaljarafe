@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { CalendarioService } from "../calendario.service";
+import { User } from "src/app/user/user.model";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "app-task",
@@ -13,19 +15,17 @@ export class TaskComponent implements OnInit {
   private _heightRsz: number;
   private _topRsz: number;
   private _tVuelo: number;
-  private _cursor: string;
+  private _cursor: string = "auto";
   private _top: number;
-  private _dragging: boolean;
+  private _dragging: boolean = false;
   previousTop: number;
-  private buttonStyle = {
-    "height.rem": this.height,
-    "top.rem": this.top,
-    cursor: this.cursor,
-    "z-index": 10
-  };
+
+  private buttonStyle = new Object()
 
   @Input() id: string = `${this.plane}_${this.hour}`;
-  @Input() task: TaskComponent;
+  @Input() day: Date;
+  @Input() user: User;
+  previousId: string;
 
   @Input() public get top(): number {
     return this._top;
@@ -34,12 +34,9 @@ export class TaskComponent implements OnInit {
     this._top = value;
     this._hour = this.calculateHour(value);
     if (this.plane != undefined) this.id = `${this.plane}_${this.hour}`;
-    this.buttonStyle["top.rem"] = this.top;
+    this.buttonStyle["top.rem"] = value;
   }
 
-  public getTask(): TaskComponent {
-    return this.task;
-  }
 
   @Input() public get height(): number {
     return this._height;
@@ -69,19 +66,19 @@ export class TaskComponent implements OnInit {
   }
 
   // ----------- Constructor ---------------
-  constructor(private calendarioService: CalendarioService) {
+  constructor(private calendarioService: CalendarioService,private modalService: NgbModal) {
     this.height = 2;
   }
 
   ngOnInit() {
     this.id = `${this.plane}_${this.hour}`;
-    console.log(this.task);
-    this.top = this.task.top;
+
+    // this.top = this.task.top;
     this.cursor = "auto";
     this.buttonStyle = {
       "height.rem": this.height,
       "top.rem": this.top,
-      cursor: this.cursor,
+      "cursor": this.cursor,
       "z-index": 10
     };
   }
@@ -145,10 +142,8 @@ export class TaskComponent implements OnInit {
     if (event.target.classList.contains("resizingArea")) {
       this.calendarioService.resizing = true;
       if (this.calendarioService.taskResizing == undefined)
-        this.calendarioService.taskResizing = new TaskComponent(
-          this.calendarioService
-        );
-      this.calendarioService.taskResizing = this.task;
+        this.calendarioService.taskResizing = this
+      this.calendarioService.taskResizing = this;
     }
     if (this.clickInButton(event)) {
       this.calendarioService.moving = true;
@@ -156,6 +151,7 @@ export class TaskComponent implements OnInit {
       this.cursor = "move";
       this.calendarioService.taskMoving = this;
       this.previousTop = this.top;
+      this.previousId = this.id;
     }
   }
 
@@ -173,7 +169,7 @@ export class TaskComponent implements OnInit {
       let shiftUnit = this.calendarioService.HEIGHT_CALENDAR / 48;
       let shiftREM = (event.movementY * 2) / shiftUnit;
       this.top += shiftREM;
-      this.buttonStyle.cursor = "move";
+      this.buttonStyle["cursor"] = "move";
     }
   }
 
@@ -181,13 +177,24 @@ export class TaskComponent implements OnInit {
     if (this.calendarioService.moving) {
       let topTrunc = Math.trunc(this.top);
       this.top = topTrunc % 2 != 0 ? Math.floor(topTrunc / 2) * 2 : topTrunc;
-      if (!this.calendarioService.isOcupied(this)) {
-        this.calendarioService.updateTask(this.task, this);
-      } else this.top = this.previousTop;
 
       this.dragging = false;
       this.calendarioService.moving = false;
       this.cursor = "auto";
+      if (this.top != this.previousTop) {
+        // this.onDblClickEvent(event)
+      // } else {
+        if (!this.calendarioService.isOcupied(this)) {
+          this.calendarioService.updateTask(this.previousId, this);
+        } else {
+          this.top = this.previousTop;
+        }
+      }
+    }
+    if (this.calendarioService.resizing || this.calendarioService.creating) {
+      this.calendarioService.resizing = false;
+      this.calendarioService.creating = false;
+      this.calendarioService.updateTask(this.id, this);
     }
   }
 
@@ -214,5 +221,16 @@ export class TaskComponent implements OnInit {
         }
       }
     }
+  }
+
+    
+  showModal(template){
+    this.modalService.open(template);
+  }
+
+
+
+  onDblClickEvent(event,template) {
+    this.showModal(template)
   }
 }

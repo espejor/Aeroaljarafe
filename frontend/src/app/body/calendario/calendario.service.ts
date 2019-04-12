@@ -27,15 +27,8 @@ export class CalendarioService {
 
   constructor() {}
 
-  // public get tasksList() {
-  //   return this._tasksList;
-  // }
-  // public set tasksList(value) {
-  //   this._tasksList = value;
-  // }
-
-  public updateTask(oldTask:TaskComponent,newTask:TaskComponent){
-    this._tasksList.delete(oldTask.id);
+  public updateTask(oldTask:string,newTask:TaskComponent){
+    this._tasksList.delete(oldTask);
     this._tasksList.set(newTask.id, newTask);
     this.tasksList$.next(this._tasksList);
   }
@@ -64,7 +57,7 @@ export class CalendarioService {
     let plane = _task.plane;
     let ocupied = false;
     this._tasksList.forEach((task, key, list) => {
-      if (task.id != _task.getTask().id && !ocupied && plane == task.plane) {
+      if (task.id != _task.previousId && !ocupied && plane == task.plane) {
         if (init >= task.top) {
           if (init < task.top + task.height) 
           ocupied = true; // Empieza en medio de otra tarea

@@ -1,10 +1,11 @@
-<div class="button">
+
   <div
     id="{{ id }}"
     class="buttonTask d-flex flex-column "
     (mousedown) = "mouseDownEvent($event)"
     (mouseup) = "mouseUpEvent($event)"
     (mousemove) = "mouseMoveEvent($event)"
+    (click) = "onDblClickEvent($event,showFlightTemplate)"
       title="{{ id }}"
     [ngStyle]="buttonStyle"
   >
@@ -30,4 +31,9 @@
       (mousedown)="mouseDownEvent($event)"
     ></div>
   </div>
-</div>
+
+
+
+  <ng-template #showFlightTemplate>
+    <p>Voy pallá</p>
+  </ng-template>

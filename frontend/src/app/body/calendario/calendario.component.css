@@ -6,6 +6,10 @@
   height: 96rem;
 }
 
+.day{
+  cursor: pointer;
+}
+
 .board {
   border-right: 1px;
   border-top: 1px;

@@ -8,7 +8,7 @@
   <div class="col">
     <div class=" day" [attr.day]="day" 
     (click)="clickEvent($event)"
-    *ngIf="!showDatePicker"
+    *ngIf="!showDatePicker" 
     >
       <h4>{{ day | date: "dd-MM-yyyy" }}</h4>
     </div>
@@ -17,10 +17,11 @@
     >
       <input
         type="date"
+        name="datePickerForm"
         class="form-control"
         aria-describedby="addon-wrapping"
-        (change)="showDatePicker = false;"
-        [(ngModel)]="day"
+        (ngModelChange)="showDatePicker = false;$event !='' ? day = $event: day"
+        [ngModel]="day"
       />
     </div>
   </div>

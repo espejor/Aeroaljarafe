@@ -1,14 +1,31 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  TemplateRef
+} from "@angular/core";
 import { CalendarioService } from "../calendario.service";
 import { User } from "src/app/user/user.model";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModal,
+  NgbModalRef,
+  ModalDismissReasons
+} from "@ng-bootstrap/ng-bootstrap";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-task",
   templateUrl: "./task.component.html",
-  styleUrls: ["./task.component.css"]
+  styleUrls: ["./task.component.css"],
+  providers: []
 })
 export class TaskComponent implements OnInit {
+  @ViewChild("showFlightTemplate") showFlightTemplate: TemplateRef<any>;
+
+  popoverTitle = "Eliminar una Tarea";
+  popoverMessage = "¿Está seguro que quiere eliminar la Tarea?";
+
   private _hour: string;
   private _plane: string;
   private _height: number;
@@ -18,14 +35,21 @@ export class TaskComponent implements OnInit {
   private _cursor: string = "auto";
   private _top: number;
   private _dragging: boolean = false;
+  needInstructor: boolean = false;
+  peopleOnBoard: number = 1;
   previousTop: number;
+  showDatePicker = false;
+  showHourPicker = false;
 
-  private buttonStyle = new Object()
+  private buttonStyle = new Object();
 
   @Input() id: string = `${this.plane}_${this.hour}`;
   @Input() day: Date;
   @Input() user: User;
   previousId: string;
+  closeResult: string;
+  modalRef: NgbModalRef;
+  previousHeight: number;
 
   @Input() public get top(): number {
     return this._top;
@@ -37,7 +61,6 @@ export class TaskComponent implements OnInit {
     this.buttonStyle["top.rem"] = value;
   }
 
-
   @Input() public get height(): number {
     return this._height;
   }
@@ -45,7 +68,7 @@ export class TaskComponent implements OnInit {
     this._heightRsz = 1.5;
     this._topRsz = -value + 2 * this.heightRsz;
     this._height = value;
-    this.tVuelo = this.calculateTVuelo();
+    this._tVuelo = this.calculateTVuelo();
     this.buttonStyle["height.rem"] = value;
   }
   @Input() public get hour(): string {
@@ -55,6 +78,7 @@ export class TaskComponent implements OnInit {
     this._hour = value;
     if (this.plane != undefined) this.id = `${this.plane}_${this.hour}`;
     this._top = this.calculateTop(this.hour);
+    this.buttonStyle["top.rem"] = this._top;
   }
   @Input() public get plane(): string {
     return this._plane;
@@ -66,7 +90,11 @@ export class TaskComponent implements OnInit {
   }
 
   // ----------- Constructor ---------------
-  constructor(private calendarioService: CalendarioService,private modalService: NgbModal) {
+  constructor(
+    private calendarioService: CalendarioService,
+    private modal: NgbModal,
+    private toastr: ToastrService
+  ) {
     this.height = 2;
   }
 
@@ -78,7 +106,7 @@ export class TaskComponent implements OnInit {
     this.buttonStyle = {
       "height.rem": this.height,
       "top.rem": this.top,
-      "cursor": this.cursor,
+      cursor: this.cursor,
       "z-index": 10
     };
   }
@@ -114,9 +142,15 @@ export class TaskComponent implements OnInit {
   }
   public set tVuelo(value: number) {
     this._tVuelo = value;
+    this._height = this.calculateHeight();
+    this.buttonStyle["height.rem"] = this._height;
   }
   private calculateTVuelo(): number {
     return this.height * 15;
+  }
+
+  private calculateHeight(): number {
+    return this.tVuelo / 15;
   }
 
   calculateTop(hour: string): number {
@@ -139,11 +173,13 @@ export class TaskComponent implements OnInit {
   }
   // ------------- Handlers de ratón
   mouseDownEvent(event) {
+    this.previousHeight = this.height;
     if (event.target.classList.contains("resizingArea")) {
       this.calendarioService.resizing = true;
       if (this.calendarioService.taskResizing == undefined)
-        this.calendarioService.taskResizing = this
+        this.calendarioService.taskResizing = this;
       this.calendarioService.taskResizing = this;
+      return;
     }
     if (this.clickInButton(event)) {
       this.calendarioService.moving = true;
@@ -152,6 +188,7 @@ export class TaskComponent implements OnInit {
       this.calendarioService.taskMoving = this;
       this.previousTop = this.top;
       this.previousId = this.id;
+      return;
     }
   }
 
@@ -182,19 +219,19 @@ export class TaskComponent implements OnInit {
       this.calendarioService.moving = false;
       this.cursor = "auto";
       if (this.top != this.previousTop) {
-        // this.onDblClickEvent(event)
-      // } else {
-        if (!this.calendarioService.isOcupied(this)) {
-          this.calendarioService.updateTask(this.previousId, this);
-        } else {
-          this.top = this.previousTop;
-        }
+        this.testAndRecoveryPosAndTam()
       }
     }
     if (this.calendarioService.resizing || this.calendarioService.creating) {
       this.calendarioService.resizing = false;
-      this.calendarioService.creating = false;
       this.calendarioService.updateTask(this.id, this);
+      if (this.calendarioService.creating) {
+        this.calendarioService.creating = false;
+        this.previousId = this.id;
+        this.previousHeight = this.height;
+        this.previousTop = this.top;
+        this.showModal(this.showFlightTemplate);
+      }
     }
   }
 
@@ -223,14 +260,69 @@ export class TaskComponent implements OnInit {
     }
   }
 
-    
-  showModal(template){
-    this.modalService.open(template);
+  showModal(template) {
+    this.modalRef = this.modal.open(template, {
+      ariaLabelledBy: "modal-basic-title",
+      centered: true
+    });
+    this.modalRef.result.then(
+      result => {
+        this.closeResult = `Closed with: ${result}`;
+        console.log(this.closeResult);
+      },
+      reason => {
+        this.height = this.previousHeight;
+        this.top = this.previousTop;
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        console.log(this.closeResult);
+      }
+    );
+  }
+  getDismissReason(reason: any) {
+    if (reason === ModalDismissReasons.ESC) {
+      return "by pressing ESC";
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return "by clicking on a backdrop";
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
+  onClickEvent(event, template) {
+    if (event.target.classList.contains("fa")) {
+      event.stopPropagation();
+      return;
+    }
+    this.previousId = this.id;
+    this.showModal(template);
+  }
 
+  updateDataFlight(form) {
+    this.testAndRecoveryPosAndTam();
+    this.modalRef.close();
+  }
+  
+  private testAndRecoveryPosAndTam(){
+    if (!this.calendarioService.isOcupied(this)) {
+      this.calendarioService.updateTask(this.previousId, this);
+    } else {
+      this.top = this.previousTop;
+      this.height = this.previousHeight;
+    }
+  }
 
-  onDblClickEvent(event,template) {
-    this.showModal(template)
+  deleteTask(id: string) {
+    this.calendarioService.deleteTask(id).subscribe(
+      data => {
+        console.log(data);
+        this.toastr.success(
+          `Se ha eliminado el vuelo de inicio a las : ${data.task.hour}`,
+          "¡OK!"
+        );
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 }

@@ -147,4 +147,17 @@ export class CalendarioService {
   public set taskResizing(value: TaskComponent) {
     this._taskResizing = value;
   }
+
+  
+  deleteTask(id: string): Observable<any> {
+    
+    this.deleteElementFromTasks(id);
+    //return this.httpService.deleteItem(`${this.domain}${this.planeUrl}`, id)
+    return null
+  }
+  
+  deleteElementFromTasks(id: string) {
+    this.removeTask(this.getTask(id))
+  }
+
 }

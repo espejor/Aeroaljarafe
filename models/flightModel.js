@@ -19,7 +19,8 @@ const FlightSchema = new Schema({
     endActual:      Date,
     initHourmeter:  Number,
     endHourmeter:   Number,
-    peopleOnBoard:  Number
+    peopleOnBoard:  Number,
+    needInstructor: Boolean
 })
 
 

@@ -9,7 +9,9 @@ import { CalendarioService } from "./calendario.service";
 import { TaskComponent } from "./task/task.component";
 import { TasksComponent } from "./tasks/tasks.component";
 import { FormsModule } from "@angular/forms";
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { ConfirmationPopoverModule } from "angular-confirmation-popover";
+import { ToastrModule } from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -21,7 +23,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TaskComponent,
     TasksComponent
   ],
-  imports: [NgbModule.forRoot(),FormsModule, CommonModule,],
+  imports: [
+    NgbModule.forRoot(),
+    FormsModule,
+    ConfirmationPopoverModule,
+    CommonModule,
+    ToastrModule.forRoot()
+  ],
   exports: [
     CalendarioComponent,
     RowComponent,

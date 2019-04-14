@@ -12,7 +12,8 @@ const PlaneSchema = new Schema({
     status: {type: Schema.ObjectId,ref: "Availability"},
     availability: {type: Schema.ObjectId,ref: "Status"},
     nextMaintenance:Date,
-    hours: {type:Number, default:0}
+    hours: { type: Number, default: 0 },
+    capacity: { type: Number, default: 1 }
 })
 
 PlaneSchema.pre("remove",function (next){

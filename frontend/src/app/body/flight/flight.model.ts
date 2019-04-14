@@ -17,5 +17,6 @@ export class Flight {
     endActual:      Date;
     initHourmeter:  number;
     endHourmeter:   number;
-    peopleOnBoard:  number;
+    peopleOnBoard: number;
+    needInstructor: boolean;
 }
